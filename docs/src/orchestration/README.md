@@ -135,6 +135,9 @@ kubectl expose deployment nginx-deployment --type=LoadBalancer --port=80 --targe
 
 This command will create a LoadBalancer service that exposes the `nginx-deployment` on port 80.
 
+![kubernetes](../assets/images/kubernetes.jpg)
+
+
 ## GUIs
 
 Rancher and Portainer are both tools that provide graphical user interfaces (GUIs) for managing Kubernetes clusters, among other features. 
