@@ -85,7 +85,7 @@ webserver2.example.com
 database1.example.com
 ```
 
-##  playbooks setup
+### playbooks setup
 
 Create a playbook (`playbook.yml`) containing tasks and configurations:
 ```yaml
@@ -137,7 +137,7 @@ Encrypt sensitive data like passwords or API keys:
 ansible-vault encrypt secrets.yml
 ```
 
-## 🧪 Exercise
+### 🧪 Exercise
 
 Step 1 : Make the provisionning of a web server on a VM Ubuntu of your collegue laptop over WiFi. Use a playbook for that
 
@@ -162,7 +162,7 @@ Vagrant.configure("2") do |config|
 end
 ```
 
-## 🧪 Exercise
+### 🧪 Exercise
 
 Update your vagrant box http server with ansible provisionning instead of scripting
 
@@ -207,11 +207,11 @@ Apply the configuration defined in the `main.tf` file:
 terraform apply
 ```
 
-## Provisioning with GitLab and Terraform for GitOps
+## GitLab and Terraform for GitOps
 
 GitLab provides Continuous Integration/Continuous Deployment (CI/CD) capabilities that can include provisioning tasks. By utilizing GitLab CI/CD pipelines, you can automate provisioning tasks, integrating Ansible or Terraform scripts to set up and configure infrastructure as part of the deployment process.
 
-## 🧪 Exercise
+### 🧪 Exercise
 
 Use terraform docker image to deploy throw Gitlab a virtual machine on AWS.
 Use puppet to provision an http server on it

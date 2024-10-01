@@ -8,7 +8,7 @@ Virtualization refers to the creation of virtual (rather than physical) versions
 
 ## History 
 
-### In the Dark ages : One application on One physical server
+#### In the Dark ages : One application on One physical server
 
 
 ![virtu1](../assets/images/virtu_arch1.png)
@@ -20,7 +20,7 @@ Virtualization refers to the creation of virtual (rather than physical) versions
 * Difficult to migrate
 * Vendor lock in
 
-### Then, virtualization : One server, multiple apps in VMs
+#### Then, virtualization : One server, multiple apps in VMs
 
 ![virtu2](../assets/images/virtu_arch2.png)
 
@@ -32,7 +32,7 @@ Virtualization refers to the creation of virtual (rather than physical) versions
 
 ![virtu3](../assets/images/virtu_arch3.png)
 
-### But VMs
+#### But VMs
 
 * Each VMs stills requires
     * CPU allocation
@@ -288,7 +288,7 @@ You can find more command informations [here](http://docs.vagrantup.com/v2/cli/i
 
 Hypervisor Type I, also known as a bare-metal hypervisor, runs directly on the physical hardware without the need for a host operating system. It provides better performance and efficiency by eliminating the overhead of an additional operating system layer. Examples include VMware ESXi and Microsoft Hyper-V.
 
-### What is VMware ESXi?
+#### What is VMware ESXi?
 VMware ESXi is a powerful, bare-metal hypervisor, designed to create and manage virtual machines (VMs) on physical servers. It offers a range of functionalities essential for virtualization and efficient resource management in a data center environment.
 
 ![vsphere](../assets/images/vsphere.png)

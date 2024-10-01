@@ -12,14 +12,14 @@ Objectives :
 
 ![docker70s](../assets/images/docker70.png)
 
-### What is it?
+#### What is it?
 
 * Software based on well known linux technologies
 * Yet another layers between software and hardware
 * Created to ease deployment of applications
 * Starting point: cargo transport
 
-### Containers… for softwares ?
+#### Containers… for softwares ?
 
 * As cargo container solved the problem of ethergenious transport mode, does software containers can solve
 
@@ -34,11 +34,11 @@ rkt (Rocket): Focuses on security and composability, providing a security-focuse
 * `Linux-VServer`: Provides lightweight virtualization for partitioning a single server into isolated containers for security and resource control.
 * `VMware vSphere Integrated Containers` (VIC)" for basic container deployment and management within VMware vSphere environments.
 
-### What is a container ? 
+#### What is a container ? 
 
 ## History 
 
-### In the Dark ages : One application on One physical server
+#### In the Dark ages : One application on One physical server
 
 
 ![virtu1](../assets/images/virtu_arch1.png)
@@ -50,7 +50,7 @@ rkt (Rocket): Focuses on security and composability, providing a security-focuse
 * Difficult to migrate
 * Vendor lock in
 
-### Then, virtualization : One server, multiple apps in VMs
+#### Then, virtualization : One server, multiple apps in VMs
 
 ![virtu2](../assets/images/virtu_arch2.png)
 
@@ -62,7 +62,7 @@ rkt (Rocket): Focuses on security and composability, providing a security-focuse
 
 ![virtu3](../assets/images/virtu_arch3.png)
 
-### But VMs
+#### But VMs
 
 * Each VMs stills requires
     * CPU allocation
@@ -74,7 +74,7 @@ rkt (Rocket): Focuses on security and composability, providing a security-focuse
 * Guest OS means wasted resources
 * Application portability not guaranteed
 
-### Containers
+#### Containers
 
 ![dockerarch](../assets/images/dockerarch.png)
 
@@ -84,21 +84,21 @@ rkt (Rocket): Focuses on security and composability, providing a security-focuse
 * Share the same OS kernel
 * Works with all major Linux and Windows distributions
 
-### Benefits
+#### Benefits
 
 * Speed : No OS to boot = applications online in a seconds
 * Portability : less dependencies between process layers = ability to move between infrastructure
 * Efficiency : less OS overhead
 * Improved VM density
 
-### Virtual Machines VS Containers ?
+#### Virtual Machines VS Containers ?
 
 ![vmvscontainer](../assets/images/vmvscontainer.png)
 
 * Containers are an app level construct
 * VMs are an infrastructure level construct to turn one machine into many servers 
 
-### Mixed architecture
+#### Mixed architecture
 
 ![mixed](../assets/images/mixed.png)
 

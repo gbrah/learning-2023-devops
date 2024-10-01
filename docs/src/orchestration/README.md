@@ -30,12 +30,12 @@ The architecture of Kubernetes is based on a master-slave model:
   - **Container Runtime**: Software responsible for running containers, such as Docker or containerd.
 
 
-### Run your first pod in kubernetes
+###  First pod 
 ```bash
 kubectl run nginx --image=nginx
 ```
 
-### Create and Deploy a Containerized Application with a manifest
+### Manifest
 
 Here is an example of a Kubernetes Pod definition in YAML format:
 
@@ -75,7 +75,8 @@ kubectl apply -f example-pod.yaml
 
 This will create the Pod in your Kubernetes cluster based on the provided definition.
 
-### Checking Deployment Status
+### Basic commands 
+#### Deployment Status
 
 You can check the status of the deployment using the `kubectl get` command:
 
@@ -85,37 +86,37 @@ kubectl get deployments
 This command will show you the status of all deployments in the cluster, including the `nginx-deployment` we just created.
 
 
-### Login (should be already done with Docker Desktop)
+#### Login
 ```bash
 kubectl config set-context <context>
 ```
 
-### Launch an nginx pod
+#### Launch an nginx pod
 ```bash
 kubectl get pod nginx
 ```
 
-### List pods
+#### List pods
 ```bash
 kubectl get pods
 ```
 
-### Interact with a Pod
+#### Interact with a Pod
 ```bash
 kubectl exec -it <pod_name>   -- /bin/bash
 ```
 
-### Access your pod from your localhost loopback
+#### Access your pod from your localhost loopback
 ```bash
 kubectl port-forward pods/nginx 8080:80
 ```
 
-### Delete everything
+#### Delete everything
 ```bash
 kubectl delete pod nginx
 ```
 
-### Scaling the Deployment
+#### Scaling the Deployment
 
 To scale the deployment, you can use the `kubectl scale` command:
 
@@ -125,7 +126,7 @@ kubectl scale deployment nginx-deployment --replicas=5
 
 This command will scale the `nginx-deployment` to have 5 replicas.
 
-### Exposing the Deployment
+#### Exposing the Deployment
 
 To expose the deployment externally, you can create a Kubernetes service:
 
@@ -154,7 +155,7 @@ Rancher and Portainer are both tools that provide graphical user interfaces (GUI
    - **Security**: It provides role-based access control (RBAC) and other security features to ensure the security of your Kubernetes clusters and workloads.
    - **CI/CD Integration**: Rancher integrates with popular CI/CD tools like Jenkins, GitLab CI, and Drone to enable continuous integration and delivery workflows for Kubernetes applications.
 
-### **Portainer**:
+### **Portainer**
 
 ![portainer](../assets/images/portainer.png)
 
@@ -169,16 +170,15 @@ Rancher and Portainer are both tools that provide graphical user interfaces (GUI
    - **Integration with Docker**: Portainer seamlessly integrates with Docker, allowing users to manage both Docker and Kubernetes environments from a single interface.
 
 
-## Exercises
 
-### 🧪 Exercise 1 - Configure docker desktop to enable Kubernetes and Portainer GUI
+### 🧪 Exercise 1 - Kubernetes and Portainer GUI
 
 * [Enable kubernetes on your docker desktop installation](https://docs.docker.com/desktop/kubernetes/)
 * [Install Portainer node on your kubernetes server](https://docs.portainer.io/start/install-ce/server/kubernetes/wsl)
 * portainer should be accessible at : [https://localhost:30779/#!/auth](https://localhost:30779/#!/auth)
 
 
-### 🧪 Exercise 2 - Convert and adapt your manifest yml with Kompose
+### 🧪 Exercise 2 - Kompose
 
 * [Install Kompose software to convert your compose.yml to a manifest kubernetes](https://kompose.io/installation/#windows)
 
@@ -517,7 +517,7 @@ spec:
 :::
 
 
-### 🧪 Exercise 3 - Add a new service on your architecture.
+### 🧪 Exercise 3 - Additionnal services
 
 Select the service of your choice and try to add it to your manifest. 
 Be creative !
