@@ -26,8 +26,6 @@ Integration in the production environment ensures a smooth transition of tested 
 | **Git**             | ✓                         |                      |                      |                      |                      |
 | **Mercurial (Hg)**  | ✓                         |                      |                      |                      |                      |
 | **Bitbucket**       | ✓                         | ✓                    | ✓                    | ✓                    | ✓                    |
-| **GitHub**          | ✓                         | ✓                    | ✓                    | ✓                    | ✓                    |
-| **GitLab**          | ✓                         | ✓                    | ✓                    | ✓                    | ✓                    |
 | **Gitea**           | ✓                         |                      |                      |                      |                      |
 | **Travis CI**       |                           | ✓                    |                      |                      |                      |
 | **Jenkins**         |                           | ✓                    | ✓                    |                      |                      |
@@ -35,7 +33,7 @@ Integration in the production environment ensures a smooth transition of tested 
 | **Azure DevOps**    | ✓                         | ✓                    | ✓                    | ✓                    |                      |
 | **GitHub Actions**  | ✓                         | ✓                    |                      | ✓                    |                      |
 | **Azure DevOps Pipelines** |                   | ✓                    | ✓                    |                      |                      |
-| **GitLab CI/CD**    | ✓                         | ✓                    | ✓                    | ✓                    |                      |
+| **GitLab CI**    | ✓                         | ✓                    | ✓                    | ✓                    |                      |
 | **AWS CodePipeline**|                           | ✓                    | ✓                    |                      |                      |
 | **Google Cloud Build** |                        | ✓                    | ✓                    |                      |                      |
 
@@ -61,12 +59,12 @@ Its functionalities include:
 
 ![pipeline](../assets/images/pipeline.png)
 
-**Jobs:** Individual tasks defined in the `gitlab-ci.yml` file. They represent actions such as build, test, deploy, etc.
+**Jobs:** Individual tasks defined in the `.gitlab-ci.yml` file. They represent actions such as build, test, deploy, etc.
 **Stages:** Divisions in the pipeline where jobs are grouped. Typical stages include build, test, deploy, allowing sequential execution.
 
-#### `gitlab-ci.yml` Configuration
+#### `.gitlab-ci.yml` Configuration
 
-The `gitlab-ci.yml` is a configuration file at the root of your repository that defines the CI/CD pipeline, specifying jobs, stages, scripts, and configurations for the CI/CD process.
+The `.gitlab-ci.yml` is a configuration file at the root of your repository that defines the CI/CD pipeline, specifying jobs, stages, scripts, and configurations for the CI/CD process.
 
 ```yaml
 # This is an example GitLab CI/CD configuration file
@@ -116,7 +114,7 @@ deploy_job:
 
 ![cicd](../assets/images/runners.png)
 
-- **GitLab Runner:** independant processing power that executes CI/CD jobs defined in the `gitlab-ci.yml`. It can be installed on various platforms and supports different executor types like Shell, Docker, Kubernetes, etc.
+- **GitLab Runner:** independant processing power that executes CI/CD jobs defined in the `.gitlab-ci.yml`. It can be installed on various platforms and supports different executor types like Shell, Docker, Kubernetes, etc.
   
 - **Executor Types:** Determines how jobs are executed. For instance, Docker executor runs jobs inside Docker containers for isolated and reproducible environments.
 
