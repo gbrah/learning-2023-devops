@@ -1,0 +1,331 @@
+import{_ as i,M as p,p as o,q as l,R as n,t as s,N as e,a1 as t}from"./framework-96b046e1.js";const c="/learning-2023-devops/assets/kub-81d39aef.png",u="/learning-2023-devops/assets/kubernetes-8626eea2.jpg",r="/learning-2023-devops/assets/portainer-fd28e989.png",d={},k=t('<h1 id="orchestration" tabindex="-1"><a class="header-anchor" href="#orchestration" aria-hidden="true">#</a> Orchestration</h1><h2 id="definition" tabindex="-1"><a class="header-anchor" href="#definition" aria-hidden="true">#</a> Definition</h2><p>Orchestration in the context of DevOps refers to the automated arrangement, coordination, and management of software elements, such as containers or services, within a computing environment. It involves managing the deployment, scaling, and operation of complex applications to ensure they function efficiently and reliably.</p><h2 id="kubernetes" tabindex="-1"><a class="header-anchor" href="#kubernetes" aria-hidden="true">#</a> Kubernetes</h2><p>Kubernetes, often abbreviated as K8s, is an open-source container orchestration platform designed to automate the deployment, scaling, and management of containerized applications. It was originally developed by Google and is now maintained by the Cloud Native Computing Foundation (CNCF). Kubernetes provides a framework for automating the deployment, scaling, and management of containerized applications, allowing developers to focus on writing code rather than managing infrastructure.</p><h3 id="definition-pod" tabindex="-1"><a class="header-anchor" href="#definition-pod" aria-hidden="true">#</a> Definition : Pod</h3><p>A pod in Kubernetes is the smallest and simplest deployable unit that represents a single instance of a running process or application in the cluster. It encapsulates one or more containers, storage resources, and unique networking options. Containers within a pod share the same network namespace, allowing them to communicate with each other using localhost. Pods serve as the basic building blocks of Kubernetes deployments, providing a logical unit for managing application components and ensuring co-location and co-scheduling of tightly coupled containers. They can be horizontally scaled by creating multiple replicas of the same pod template, distributed across the cluster, to handle increased workload demands or achieve high availability.</p><h3 id="architecture" tabindex="-1"><a class="header-anchor" href="#architecture" aria-hidden="true">#</a> Architecture</h3><p><img src="'+c+`" alt="arch1"></p><p>The architecture of Kubernetes is based on a master-slave model:</p><ul><li><p><strong>Master Node</strong>: The master node is responsible for managing the Kubernetes cluster. It orchestrates communication between nodes, schedules workloads, and maintains the desired state of the cluster. The master node consists of several components:</p><ul><li><strong>API Server</strong>: Exposes the Kubernetes API, which is used by administrators and clients to interact with the cluster.</li><li><strong>Controller Manager</strong>: Monitors the state of the cluster and performs actions to maintain the desired state.</li><li><strong>Scheduler</strong>: Assigns workloads to nodes based on resource requirements and other constraints.</li><li><strong>etcd</strong>: Consistent and highly-available key-value store used as Kubernetes&#39; backing store for all cluster data.</li></ul></li><li><p><strong>Worker Nodes</strong>: Worker nodes, also known as minions, are responsible for running containerized applications. They receive instructions from the master node and execute tasks accordingly. Each worker node runs the following components:</p><ul><li><strong>Kubelet</strong>: An agent that runs on each node and is responsible for managing containers, including starting, stopping, and monitoring containers.</li><li><strong>Kube Proxy</strong>: Manages network connectivity and routing for containers.</li><li><strong>Container Runtime</strong>: Software responsible for running containers, such as Docker or containerd.</li></ul></li></ul><h3 id="first-pod" tabindex="-1"><a class="header-anchor" href="#first-pod" aria-hidden="true">#</a> First pod</h3><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>kubectl run nginx <span class="token parameter variable">--image</span><span class="token operator">=</span>nginx
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><h3 id="manifest" tabindex="-1"><a class="header-anchor" href="#manifest" aria-hidden="true">#</a> Manifest</h3><p>Here is an example of a Kubernetes Pod definition in YAML format:</p><div class="language-yaml line-numbers-mode" data-ext="yml"><pre class="language-yaml"><code><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Pod
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> example<span class="token punctuation">-</span>pod
+  <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+    <span class="token key atrule">app</span><span class="token punctuation">:</span> example
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> nginx<span class="token punctuation">-</span>container
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> nginx<span class="token punctuation">:</span>latest
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">containerPort</span><span class="token punctuation">:</span> <span class="token number">80</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>Let&#39;s break down this definition:</p><ul><li><code>apiVersion</code>: Specifies the Kubernetes API version being used. In this case, it&#39;s <code>v1</code>, which is the core Kubernetes API version.</li><li><code>kind</code>: Specifies the type of Kubernetes object being defined. Here, it&#39;s <code>Pod</code>.</li><li><code>metadata</code>: Contains metadata about the Pod, such as its name and labels. <ul><li><code>name</code>: The name of the Pod, which is <code>example-pod</code> in this case.</li><li><code>labels</code>: Key-value pairs that can be used to identify and organize Pods. Here, we&#39;ve applied a label with the key <code>app</code> and value <code>example</code>.</li></ul></li><li><code>spec</code>: Defines the specification of the Pod, including its containers and other settings. <ul><li><code>containers</code>: A list of containers to run within the Pod. <ul><li><code>name</code>: The name of the container, which is <code>nginx-container</code>.</li><li><code>image</code>: The Docker image to use for the container. Here, it&#39;s <code>nginx:latest</code>.</li><li><code>ports</code>: Specifies the ports that the container exposes. <ul><li><code>containerPort</code>: The port number that the container listens on. In this example, it&#39;s <code>80</code>, which is the default port for HTTP traffic.</li></ul></li></ul></li></ul></li></ul><p>This Pod definition describes a single Pod named <code>example-pod</code>, running a single container based on the NGINX image (<code>nginx:latest</code>) that exposes port <code>80</code>. You can create this Pod in your Kubernetes cluster by saving the above YAML to a file (e.g., <code>example-pod.yaml</code>) and using the <code>kubectl apply</code> command:</p><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>kubectl apply <span class="token parameter variable">-f</span> example-pod.yaml
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><p>This will create the Pod in your Kubernetes cluster based on the provided definition.</p><h3 id="basic-commands" tabindex="-1"><a class="header-anchor" href="#basic-commands" aria-hidden="true">#</a> Basic commands</h3><h4 id="deployment-status" tabindex="-1"><a class="header-anchor" href="#deployment-status" aria-hidden="true">#</a> Deployment Status</h4><p>You can check the status of the deployment using the <code>kubectl get</code> command:</p><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>kubectl get deployments
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><p>This command will show you the status of all deployments in the cluster, including the <code>nginx-deployment</code> we just created.</p><h4 id="login" tabindex="-1"><a class="header-anchor" href="#login" aria-hidden="true">#</a> Login</h4><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>kubectl config set-context <span class="token operator">&lt;</span>context<span class="token operator">&gt;</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><h4 id="launch-an-nginx-pod" tabindex="-1"><a class="header-anchor" href="#launch-an-nginx-pod" aria-hidden="true">#</a> Launch an nginx pod</h4><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>kubectl get pod nginx
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><h4 id="list-pods" tabindex="-1"><a class="header-anchor" href="#list-pods" aria-hidden="true">#</a> List pods</h4><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>kubectl get pods
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><h4 id="interact-with-a-pod" tabindex="-1"><a class="header-anchor" href="#interact-with-a-pod" aria-hidden="true">#</a> Interact with a Pod</h4><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>kubectl <span class="token builtin class-name">exec</span> <span class="token parameter variable">-it</span> <span class="token operator">&lt;</span>pod_name<span class="token operator">&gt;</span>   -- /bin/bash
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><h4 id="access-your-pod-from-your-localhost-loopback" tabindex="-1"><a class="header-anchor" href="#access-your-pod-from-your-localhost-loopback" aria-hidden="true">#</a> Access your pod from your localhost loopback</h4><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>kubectl port-forward pods/nginx <span class="token number">8080</span>:80
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><h4 id="delete-everything" tabindex="-1"><a class="header-anchor" href="#delete-everything" aria-hidden="true">#</a> Delete everything</h4><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>kubectl delete pod nginx
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><h4 id="scaling-the-deployment" tabindex="-1"><a class="header-anchor" href="#scaling-the-deployment" aria-hidden="true">#</a> Scaling the Deployment</h4><p>To scale the deployment, you can use the <code>kubectl scale</code> command:</p><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>kubectl scale deployment nginx-deployment <span class="token parameter variable">--replicas</span><span class="token operator">=</span><span class="token number">5</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><p>This command will scale the <code>nginx-deployment</code> to have 5 replicas.</p><h4 id="exposing-the-deployment" tabindex="-1"><a class="header-anchor" href="#exposing-the-deployment" aria-hidden="true">#</a> Exposing the Deployment</h4><p>To expose the deployment externally, you can create a Kubernetes service:</p><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>kubectl expose deployment nginx-deployment <span class="token parameter variable">--type</span><span class="token operator">=</span>LoadBalancer <span class="token parameter variable">--port</span><span class="token operator">=</span><span class="token number">80</span> --target-port<span class="token operator">=</span><span class="token number">80</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><p>This command will create a LoadBalancer service that exposes the <code>nginx-deployment</code> on port 80.</p><p><img src="`+u+'" alt="kubernetes"></p><h2 id="guis" tabindex="-1"><a class="header-anchor" href="#guis" aria-hidden="true">#</a> GUIs</h2><p>Rancher and Portainer are both tools that provide graphical user interfaces (GUIs) for managing Kubernetes clusters, among other features.</p><h3 id="rancher" tabindex="-1"><a class="header-anchor" href="#rancher" aria-hidden="true">#</a> <strong>Rancher</strong></h3><p>Rancher is an open-source container management platform that provides a centralized control plane for managing multiple Kubernetes clusters, regardless of where they are deployed (on-premises, cloud, or hybrid environments). It offers features such as cluster provisioning, monitoring, logging, security, and multi-tenancy. Rancher simplifies the deployment and management of Kubernetes by providing an intuitive UI and CLI tools. It also supports other container orchestration platforms, such as Docker Swarm and Apache Mesos.</p><p>Key features of Rancher in relation to Kubernetes include:</p><ul><li><strong>Cluster Management</strong>: Rancher allows you to easily provision, manage, and scale Kubernetes clusters through its user-friendly interface.</li><li><strong>Multi-Cluster Operations</strong>: It provides tools for deploying and managing applications across multiple Kubernetes clusters, streamlining operations in complex environments.</li><li><strong>Monitoring and Logging</strong>: Rancher offers built-in monitoring and logging capabilities to help you monitor the health and performance of your Kubernetes clusters and applications.</li><li><strong>Security</strong>: It provides role-based access control (RBAC) and other security features to ensure the security of your Kubernetes clusters and workloads.</li><li><strong>CI/CD Integration</strong>: Rancher integrates with popular CI/CD tools like Jenkins, GitLab CI, and Drone to enable continuous integration and delivery workflows for Kubernetes applications.</li></ul><h3 id="portainer" tabindex="-1"><a class="header-anchor" href="#portainer" aria-hidden="true">#</a> <strong>Portainer</strong></h3><p><img src="'+r+'" alt="portainer"></p><p>Portainer is an open-source container management tool designed to simplify the deployment and management of containerized applications. While it initially focused on Docker, Portainer has expanded its support to Kubernetes, enabling users to manage Kubernetes clusters through its intuitive web-based interface. Portainer offers features such as cluster management, container lifecycle management, resource utilization monitoring, and role-based access control.</p><p>Key features of Portainer in relation to Kubernetes include:</p><ul><li><strong>Cluster Management</strong>: Portainer allows you to manage Kubernetes clusters and deploy applications using a visual interface, eliminating the need for complex YAML configuration files.</li><li><strong>Container Lifecycle Management</strong>: It provides tools for managing container lifecycles, including creating, starting, stopping, and deleting containers.</li><li><strong>Resource Monitoring</strong>: Portainer offers built-in monitoring capabilities to track resource utilization (CPU, memory, and storage) across Kubernetes clusters and individual workloads.</li><li><strong>RBAC</strong>: It supports role-based access control (RBAC) to control user permissions and restrict access to sensitive operations within Kubernetes clusters.</li><li><strong>Integration with Docker</strong>: Portainer seamlessly integrates with Docker, allowing users to manage both Docker and Kubernetes environments from a single interface.</li></ul><h3 id="🧪-exercise-1-kubernetes-and-portainer-gui" tabindex="-1"><a class="header-anchor" href="#🧪-exercise-1-kubernetes-and-portainer-gui" aria-hidden="true">#</a> 🧪 Exercise 1 - Kubernetes and Portainer GUI</h3>',59),m={href:"https://docs.docker.com/desktop/kubernetes/",target:"_blank",rel:"noopener noreferrer"},v={href:"https://docs.portainer.io/start/install-ce/server/kubernetes/wsl",target:"_blank",rel:"noopener noreferrer"},b={href:"https://localhost:30779/#!/auth",target:"_blank",rel:"noopener noreferrer"},h=n("h3",{id:"🧪-exercise-2-kompose",tabindex:"-1"},[n("a",{class:"header-anchor",href:"#🧪-exercise-2-kompose","aria-hidden":"true"},"#"),s(" 🧪 Exercise 2 - Kompose")],-1),g={href:"https://kompose.io/installation/#windows",target:"_blank",rel:"noopener noreferrer"},y=n("li",null,[n("p",null,"Adapt the configuration to deploy successfully your services.")],-1),f={class:"custom-container tip"},x=n("p",{class:"custom-container-title"},"Some usefull documentation to adapt the manifest converted",-1),_={href:"https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport",target:"_blank",rel:"noopener noreferrer"},w={href:"https://kubernetes.io/docs/concepts/configuration/configmap/",target:"_blank",rel:"noopener noreferrer"},q={href:"https://kubernetes.io/docs/concepts/storage/persistent-volumes/#reserving-a-persistentvolume",target:"_blank",rel:"noopener noreferrer"},P=t(`<details class="custom-container details"><summary>solution</summary><p><em>site.conf</em></p><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>server <span class="token punctuation">{</span>
+    listen <span class="token number">80</span><span class="token punctuation">;</span>
+    index index.php index.html<span class="token punctuation">;</span>
+    server_name <span class="token number">127.0</span>.0.1<span class="token punctuation">;</span>
+    error_log  /var/log/nginx/error.log<span class="token punctuation">;</span>
+    access_log /var/log/nginx/access.log<span class="token punctuation">;</span>
+    root /site<span class="token punctuation">;</span>    
+
+    location ~ <span class="token punctuation">\\</span>.php$ <span class="token punctuation">{</span>
+        try_files <span class="token variable">$uri</span> <span class="token operator">=</span><span class="token number">404</span><span class="token punctuation">;</span>
+        fastcgi_split_path_info ^<span class="token punctuation">(</span>.+<span class="token punctuation">\\</span>.php<span class="token punctuation">)</span><span class="token punctuation">(</span>/.+<span class="token punctuation">)</span>$<span class="token punctuation">;</span>
+        fastcgi_pass php:9000<span class="token punctuation">;</span>
+        fastcgi_index index.php<span class="token punctuation">;</span>
+        include fastcgi_params<span class="token punctuation">;</span>
+        fastcgi_param SCRIPT_FILENAME <span class="token variable">$document_root</span><span class="token variable">$fastcgi_script_name</span><span class="token punctuation">;</span>
+        fastcgi_param PATH_INFO <span class="token variable">$fastcgi_path_info</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    location / <span class="token punctuation">{</span>
+       add_header <span class="token string">&#39;Access-Control-Allow-Origin&#39;</span> <span class="token string">&#39;*&#39;</span><span class="token punctuation">;</span>
+       add_header <span class="token string">&#39;Access-Control-Allow-Methods&#39;</span> <span class="token string">&#39;GET, POST, OPTIONS&#39;</span><span class="token punctuation">;</span>
+       add_header <span class="token string">&#39;Access-Control-Allow-Headers&#39;</span> <span class="token string">&#39;DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range&#39;</span><span class="token punctuation">;</span>
+       add_header <span class="token string">&#39;Access-Control-Expose-Headers&#39;</span> <span class="token string">&#39;Content-Length,Content-Range&#39;</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p><em>index.php</em></p><div class="language-php line-numbers-mode" data-ext="php"><pre class="language-php"><code><span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">DOCTYPE</span> <span class="token name">html</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">&gt;</span></span>My First Heading<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>My first paragraph.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
+<span class="token function">phpinfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">ini_set</span><span class="token punctuation">(</span><span class="token string single-quoted-string">&#39;display_errors&#39;</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">ini_set</span><span class="token punctuation">(</span><span class="token string single-quoted-string">&#39;display_startup_errors&#39;</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">error_reporting</span><span class="token punctuation">(</span><span class="token constant">E_ALL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">try</span> <span class="token punctuation">{</span>
+    <span class="token variable">$mysqlClient</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PDO</span><span class="token punctuation">(</span><span class="token string double-quoted-string">&quot;mysql:host=db;dbname=db;charset=utf8&quot;</span><span class="token punctuation">,</span> <span class="token string double-quoted-string">&quot;root&quot;</span><span class="token punctuation">,</span> <span class="token string double-quoted-string">&quot;example&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token variable">$mysqlClient</span><span class="token operator">-&gt;</span><span class="token function">setAttribute</span><span class="token punctuation">(</span><span class="token class-name static-context">PDO</span><span class="token operator">::</span><span class="token constant">ATTR_ERRMODE</span><span class="token punctuation">,</span> <span class="token class-name static-context">PDO</span><span class="token operator">::</span><span class="token constant">ERRMODE_EXCEPTION</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">echo</span> <span class="token string double-quoted-string">&quot;Connected successfully&quot;</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span><span class="token class-name">PDOException</span> <span class="token variable">$e</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">echo</span> <span class="token string double-quoted-string">&quot;Connection failed: &quot;</span> <span class="token operator">.</span> <span class="token variable">$e</span><span class="token operator">-&gt;</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token delimiter important">?&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">&gt;</span></span>
+
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>kompose convert <span class="token parameter variable">-f</span> docker-compose.yml <span class="token parameter variable">-o</span> manifest.yaml
+kubectl create configmap nginx-conf --from-file<span class="token operator">=</span>site.conf
+kubectl create configmap index-php --from-file<span class="token operator">=</span>index.php
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p><em>config.yml</em></p><div class="language-yaml line-numbers-mode" data-ext="yml"><pre class="language-yaml"><code><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Service
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">annotations</span><span class="token punctuation">:</span>
+    <span class="token key atrule">kompose.cmd</span><span class="token punctuation">:</span> <span class="token string">&quot;kompose convert -f docker-compose.yml -o combined.yaml&quot;</span>  <span class="token comment"># Enclose the command in double quotes</span>
+    <span class="token key atrule">kompose.version</span><span class="token punctuation">:</span> <span class="token string">&quot;1.32.0 (765fde254)&quot;</span>  <span class="token comment"># Enclose the version in double quotes</span>
+  <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+    <span class="token key atrule">io.kompose.service</span><span class="token punctuation">:</span> web
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> web
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">type</span><span class="token punctuation">:</span> NodePort
+  <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> <span class="token string">&quot;80&quot;</span>
+        <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">80</span>
+        <span class="token key atrule">targetPort</span><span class="token punctuation">:</span> <span class="token number">80</span>
+        <span class="token key atrule">nodePort</span><span class="token punctuation">:</span> <span class="token number">30080</span>
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">io.kompose.service</span><span class="token punctuation">:</span> web
+
+<span class="token punctuation">---</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> apps/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Deployment
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">annotations</span><span class="token punctuation">:</span>
+    <span class="token key atrule">kompose.cmd</span><span class="token punctuation">:</span> kompose convert <span class="token punctuation">-</span>f docker<span class="token punctuation">-</span>compose.yml <span class="token punctuation">-</span>o combined.yaml
+    <span class="token key atrule">kompose.version</span><span class="token punctuation">:</span> 1.32.0 (765fde254)
+  <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+    <span class="token key atrule">io.kompose.service</span><span class="token punctuation">:</span> db
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> db
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">replicas</span><span class="token punctuation">:</span> <span class="token number">1</span>
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">matchLabels</span><span class="token punctuation">:</span>
+      <span class="token key atrule">io.kompose.service</span><span class="token punctuation">:</span> db
+  <span class="token key atrule">template</span><span class="token punctuation">:</span>
+    <span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+      <span class="token key atrule">annotations</span><span class="token punctuation">:</span>
+        <span class="token key atrule">kompose.cmd</span><span class="token punctuation">:</span> kompose convert <span class="token punctuation">-</span>f docker<span class="token punctuation">-</span>compose.yml <span class="token punctuation">-</span>o combined.yaml
+        <span class="token key atrule">kompose.version</span><span class="token punctuation">:</span> 1.32.0 (765fde254)
+      <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+        <span class="token key atrule">io.kompose.network/tp1-default</span><span class="token punctuation">:</span> <span class="token string">&quot;true&quot;</span>
+        <span class="token key atrule">io.kompose.service</span><span class="token punctuation">:</span> db
+    <span class="token key atrule">spec</span><span class="token punctuation">:</span>
+      <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">args</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> <span class="token punctuation">-</span><span class="token punctuation">-</span>default<span class="token punctuation">-</span>authentication<span class="token punctuation">-</span>plugin=mysql_native_password
+          <span class="token key atrule">env</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> MYSQL_DATABASE
+              <span class="token key atrule">value</span><span class="token punctuation">:</span> db
+            <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> MYSQL_ROOT_PASSWORD
+              <span class="token key atrule">value</span><span class="token punctuation">:</span> example
+          <span class="token key atrule">image</span><span class="token punctuation">:</span> mysql<span class="token punctuation">:</span>latest
+          <span class="token key atrule">name</span><span class="token punctuation">:</span> db
+          <span class="token key atrule">resources</span><span class="token punctuation">:</span>
+            <span class="token key atrule">limits</span><span class="token punctuation">:</span>
+              <span class="token key atrule">cpu</span><span class="token punctuation">:</span> <span class="token string">&quot;1&quot;</span>
+              <span class="token key atrule">memory</span><span class="token punctuation">:</span> <span class="token string">&quot;1Gi&quot;</span>
+            <span class="token key atrule">requests</span><span class="token punctuation">:</span>
+              <span class="token key atrule">cpu</span><span class="token punctuation">:</span> <span class="token string">&quot;0.5&quot;</span>
+              <span class="token key atrule">memory</span><span class="token punctuation">:</span> <span class="token string">&quot;512Mi&quot;</span>
+      <span class="token key atrule">restartPolicy</span><span class="token punctuation">:</span> Always
+
+<span class="token punctuation">---</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Service
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+    <span class="token key atrule">io.kompose.service</span><span class="token punctuation">:</span> php
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> php
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">type</span><span class="token punctuation">:</span> NodePort
+  <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> <span class="token string">&quot;9000&quot;</span>
+        <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">9000</span>
+        <span class="token key atrule">targetPort</span><span class="token punctuation">:</span> <span class="token number">9000</span>
+        <span class="token key atrule">nodePort</span><span class="token punctuation">:</span> <span class="token number">30085</span>
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">io.kompose.service</span><span class="token punctuation">:</span> php
+<span class="token punctuation">---</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Service
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+    <span class="token key atrule">io.kompose.service</span><span class="token punctuation">:</span> db
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> db
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> <span class="token string">&quot;3306&quot;</span>
+      <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">3306</span>
+      <span class="token key atrule">targetPort</span><span class="token punctuation">:</span> <span class="token number">3306</span>
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">io.kompose.service</span><span class="token punctuation">:</span> db
+<span class="token punctuation">---</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> apps/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Deployment
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">annotations</span><span class="token punctuation">:</span>
+    <span class="token key atrule">kompose.cmd</span><span class="token punctuation">:</span> kompose convert <span class="token punctuation">-</span>f docker<span class="token punctuation">-</span>compose.yml <span class="token punctuation">-</span>o combined.yaml
+    <span class="token key atrule">kompose.version</span><span class="token punctuation">:</span> 1.32.0 (765fde254)
+  <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+    <span class="token key atrule">io.kompose.service</span><span class="token punctuation">:</span> php
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> php
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">replicas</span><span class="token punctuation">:</span> <span class="token number">1</span>
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">matchLabels</span><span class="token punctuation">:</span>
+      <span class="token key atrule">io.kompose.service</span><span class="token punctuation">:</span> php
+  <span class="token key atrule">strategy</span><span class="token punctuation">:</span>
+    <span class="token key atrule">type</span><span class="token punctuation">:</span> Recreate
+  <span class="token key atrule">template</span><span class="token punctuation">:</span>
+    <span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+      <span class="token key atrule">annotations</span><span class="token punctuation">:</span>
+        <span class="token key atrule">kompose.cmd</span><span class="token punctuation">:</span> kompose convert <span class="token punctuation">-</span>f docker<span class="token punctuation">-</span>compose.yml <span class="token punctuation">-</span>o combined.yaml
+        <span class="token key atrule">kompose.version</span><span class="token punctuation">:</span> 1.32.0 (765fde254)
+      <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+        <span class="token key atrule">io.kompose.network/tp1-default</span><span class="token punctuation">:</span> <span class="token string">&quot;true&quot;</span>
+        <span class="token key atrule">io.kompose.service</span><span class="token punctuation">:</span> php
+    <span class="token key atrule">spec</span><span class="token punctuation">:</span>
+      <span class="token key atrule">initContainers</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> install<span class="token punctuation">-</span>pdo<span class="token punctuation">-</span>mysql
+          <span class="token key atrule">image</span><span class="token punctuation">:</span> php<span class="token punctuation">:</span>fpm
+          <span class="token key atrule">command</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">&quot;sh&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;-c&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;docker-php-ext-install pdo_mysql &amp;&amp; echo &#39;extension=pdo_mysql.so&#39; &gt; /usr/local/etc/php/conf.d/pdo_mysql.ini&quot;</span><span class="token punctuation">]</span>
+          <span class="token key atrule">volumeMounts</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> php<span class="token punctuation">-</span>extensions
+              <span class="token key atrule">mountPath</span><span class="token punctuation">:</span> /usr/local/lib/php/extensions
+
+            <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> php<span class="token punctuation">-</span>ini
+              <span class="token key atrule">mountPath</span><span class="token punctuation">:</span> /usr/local/etc/php/conf.d
+
+      <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">image</span><span class="token punctuation">:</span> php<span class="token punctuation">:</span>fpm
+          <span class="token key atrule">name</span><span class="token punctuation">:</span> php
+          <span class="token key atrule">resources</span><span class="token punctuation">:</span>
+            <span class="token key atrule">limits</span><span class="token punctuation">:</span>
+              <span class="token key atrule">cpu</span><span class="token punctuation">:</span> <span class="token string">&quot;1&quot;</span>
+              <span class="token key atrule">memory</span><span class="token punctuation">:</span> 1Gi
+            <span class="token key atrule">requests</span><span class="token punctuation">:</span>
+              <span class="token key atrule">cpu</span><span class="token punctuation">:</span> 100m
+              <span class="token key atrule">memory</span><span class="token punctuation">:</span> 100Mi
+          <span class="token key atrule">volumeMounts</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> web<span class="token punctuation">-</span>claim0
+              <span class="token key atrule">mountPath</span><span class="token punctuation">:</span> /site/
+            
+            <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> index<span class="token punctuation">-</span>php
+              <span class="token key atrule">mountPath</span><span class="token punctuation">:</span> /site/index.php
+              <span class="token key atrule">subPath</span><span class="token punctuation">:</span> index.php
+
+            <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> php<span class="token punctuation">-</span>extensions
+              <span class="token key atrule">mountPath</span><span class="token punctuation">:</span> /usr/local/lib/php/extensions 
+
+            <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> php<span class="token punctuation">-</span>ini
+              <span class="token key atrule">mountPath</span><span class="token punctuation">:</span> /usr/local/etc/php/conf.d
+      <span class="token key atrule">restartPolicy</span><span class="token punctuation">:</span> Always
+      <span class="token comment"># Keep same volume as web</span>
+      <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> web<span class="token punctuation">-</span>claim0
+          <span class="token key atrule">persistentVolumeClaim</span><span class="token punctuation">:</span>
+            <span class="token key atrule">claimName</span><span class="token punctuation">:</span> web<span class="token punctuation">-</span>claim0
+            
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> index<span class="token punctuation">-</span>php
+          <span class="token key atrule">configMap</span><span class="token punctuation">:</span>
+           <span class="token key atrule">name</span><span class="token punctuation">:</span> index<span class="token punctuation">-</span>php
+
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> php<span class="token punctuation">-</span>extensions
+          <span class="token key atrule">emptyDir</span><span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> php<span class="token punctuation">-</span>ini
+          <span class="token key atrule">emptyDir</span><span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+<span class="token punctuation">---</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> apps/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Deployment
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">annotations</span><span class="token punctuation">:</span>
+    <span class="token key atrule">kompose.cmd</span><span class="token punctuation">:</span> kompose convert <span class="token punctuation">-</span>f docker<span class="token punctuation">-</span>compose.yml <span class="token punctuation">-</span>o combined.yaml
+    <span class="token key atrule">kompose.version</span><span class="token punctuation">:</span> 1.32.0 (765fde254)
+  <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+    <span class="token key atrule">io.kompose.service</span><span class="token punctuation">:</span> web
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> web
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">replicas</span><span class="token punctuation">:</span> <span class="token number">1</span>
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">matchLabels</span><span class="token punctuation">:</span>
+      <span class="token key atrule">io.kompose.service</span><span class="token punctuation">:</span> web
+  <span class="token key atrule">strategy</span><span class="token punctuation">:</span>
+    <span class="token key atrule">type</span><span class="token punctuation">:</span> Recreate
+  <span class="token key atrule">template</span><span class="token punctuation">:</span>
+    <span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+      <span class="token key atrule">annotations</span><span class="token punctuation">:</span>
+        <span class="token key atrule">kompose.cmd</span><span class="token punctuation">:</span> kompose convert <span class="token punctuation">-</span>f docker<span class="token punctuation">-</span>compose.yml <span class="token punctuation">-</span>o combined.yaml
+        <span class="token key atrule">kompose.version</span><span class="token punctuation">:</span> 1.32.0 (765fde254)
+      <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+        <span class="token key atrule">io.kompose.network/tp1-default</span><span class="token punctuation">:</span> <span class="token string">&quot;true&quot;</span>
+        <span class="token key atrule">io.kompose.service</span><span class="token punctuation">:</span> web
+    <span class="token key atrule">spec</span><span class="token punctuation">:</span>
+      <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">image</span><span class="token punctuation">:</span> nginx<span class="token punctuation">:</span>latest
+          <span class="token key atrule">name</span><span class="token punctuation">:</span> web
+          <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">containerPort</span><span class="token punctuation">:</span> <span class="token number">80</span>
+              <span class="token key atrule">hostIP</span><span class="token punctuation">:</span> 127.0.0.1
+              <span class="token key atrule">hostPort</span><span class="token punctuation">:</span> <span class="token number">80</span>
+              <span class="token key atrule">protocol</span><span class="token punctuation">:</span> TCP
+          <span class="token key atrule">resources</span><span class="token punctuation">:</span>
+            <span class="token key atrule">limits</span><span class="token punctuation">:</span>
+              <span class="token key atrule">cpu</span><span class="token punctuation">:</span> <span class="token string">&quot;1&quot;</span>
+              <span class="token key atrule">memory</span><span class="token punctuation">:</span> <span class="token string">&quot;512Mi&quot;</span>
+            <span class="token key atrule">requests</span><span class="token punctuation">:</span>
+              <span class="token key atrule">cpu</span><span class="token punctuation">:</span> <span class="token string">&quot;0.5&quot;</span>
+              <span class="token key atrule">memory</span><span class="token punctuation">:</span> <span class="token string">&quot;256Mi&quot;</span>
+          <span class="token key atrule">volumeMounts</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> web<span class="token punctuation">-</span>claim0
+              <span class="token key atrule">mountPath</span><span class="token punctuation">:</span> /site/
+            
+            <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> index<span class="token punctuation">-</span>php
+              <span class="token key atrule">mountPath</span><span class="token punctuation">:</span> /site/index.php
+              <span class="token key atrule">subPath</span><span class="token punctuation">:</span> index.php
+
+            <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> nginx<span class="token punctuation">-</span>conf
+              <span class="token key atrule">mountPath</span><span class="token punctuation">:</span> /etc/nginx/conf.d/default.conf
+              <span class="token key atrule">subPath</span><span class="token punctuation">:</span> site.conf
+
+      <span class="token key atrule">restartPolicy</span><span class="token punctuation">:</span> Always
+      <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+        <span class="token comment"># Modified for configMapping</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> web<span class="token punctuation">-</span>claim0
+          <span class="token key atrule">persistentVolumeClaim</span><span class="token punctuation">:</span>
+            <span class="token key atrule">claimName</span><span class="token punctuation">:</span> web<span class="token punctuation">-</span>claim0
+
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> nginx<span class="token punctuation">-</span>conf
+          <span class="token key atrule">configMap</span><span class="token punctuation">:</span>
+           <span class="token key atrule">name</span><span class="token punctuation">:</span> nginx<span class="token punctuation">-</span>conf
+
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> index<span class="token punctuation">-</span>php
+          <span class="token key atrule">configMap</span><span class="token punctuation">:</span>
+           <span class="token key atrule">name</span><span class="token punctuation">:</span> index<span class="token punctuation">-</span>php
+
+<span class="token punctuation">---</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> PersistentVolumeClaim
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+    <span class="token key atrule">io.kompose.service</span><span class="token punctuation">:</span> web<span class="token punctuation">-</span>claim0
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> web<span class="token punctuation">-</span>claim0
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">accessModes</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> ReadWriteOnce
+  <span class="token key atrule">resources</span><span class="token punctuation">:</span>
+    <span class="token key atrule">requests</span><span class="token punctuation">:</span>
+      <span class="token key atrule">storage</span><span class="token punctuation">:</span> 100Mi
+
+<span class="token comment"># Removed kompose generated volume claim of site.conf</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div></details><h3 id="🧪-exercise-3-additionnal-services" tabindex="-1"><a class="header-anchor" href="#🧪-exercise-3-additionnal-services" aria-hidden="true">#</a> 🧪 Exercise 3 - Additionnal services</h3><p>Select the service of your choice and try to add it to your manifest. Be creative !</p>`,3);function C(K,M){const a=p("ExternalLinkIcon");return o(),l("div",null,[k,n("ul",null,[n("li",null,[n("a",m,[s("Enable kubernetes on your docker desktop installation"),e(a)])]),n("li",null,[n("a",v,[s("Install Portainer node on your kubernetes server"),e(a)])]),n("li",null,[s("portainer should be accessible at : "),n("a",b,[s("https://localhost:30779/#!/auth"),e(a)])])]),h,n("ul",null,[n("li",null,[n("p",null,[n("a",g,[s("Install Kompose software to convert your compose.yml to a manifest kubernetes"),e(a)])])]),y]),n("div",f,[x,n("ul",null,[n("li",null,[n("a",_,[s("NodePort"),e(a)])]),n("li",null,[n("a",w,[s("ConfigMap"),e(a)])]),n("li",null,[n("a",q,[s("Persistant volume"),e(a)])])])]),P])}const I=i(d,[["render",C],["__file","index.html.vue"]]);export{I as default};
