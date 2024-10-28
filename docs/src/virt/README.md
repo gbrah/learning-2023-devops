@@ -413,6 +413,9 @@ VBoxManage storageattach "$VM_NAME" --storagectl "IDE Controller" --port 1 --dev
 # Start VM
 VBoxManage startvm "$VM_NAME" --type headless
 
+# Install an OS
+VBoxManage unattended install ubuntu18server --user=myuser --password=P@SSWORD --country=US --time-zone=EST --language=en-US --hostname=ubuntu18server.local --iso=/path/ubuntu-22.04-desktop-amd64.iso --start-vm=gui
+
 # Wait for VM to boot
 sleep 30
 
@@ -424,6 +427,8 @@ VBoxManage guestcontrol "$VM_NAME" --username root --password password123 --exec
 
 # Shutdown VM
 VBoxManage controlvm "$VM_NAME" poweroff
+
+
 
 ```
 :::
