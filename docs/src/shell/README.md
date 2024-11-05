@@ -785,7 +785,7 @@ ln -s /home/fanboy/personnages /home/fanboy/persofanboy
 ln -s /home/yourname/personnages /home/yourname/perso_yourname
 
 # 14. Save the complete tree structure of /home/fanboy/characters into 14.txt
-ls -R /home/fanboy/personnages > 14.txt
+ls -lR /home/fanboy/personnages > 14.txt
 
 # 15. Remove occurrences of the word "total" from 14.txt and save into 15.txt
 grep -v "total" 14.txt > 15.txt

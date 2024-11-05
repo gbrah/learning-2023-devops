@@ -383,53 +383,75 @@ please use instead of VBoxManage , [`utmctl`](https://docs.getutm.app/scripting/
 ```bash
 #!/bin/bash
 
-# VM settings
-VM_NAME="AlpineLinux"
-VM_MEMORY="1024"
-VM_CPU="1"
-VM_DISK_SIZE="20000"
+echo #### Create all Variables ####
+VM_NAME="UbuntuDesktopVM"
+ISO_URL="https://cdimage.ubuntu.com/releases/focal/release/ubuntu-20.04.5-live-server-arm64.iso"
+ISO_PATH="$HOME/Downloads/ubuntu-20.04.5-live-server-arm64.iso"
+VM_DIR="$HOME/VirtualBox VMs/$VM_NAME"
+USERNAME="ubuntu"
+PASSWORD="ubuntu"
 
-# Alpine Linux ISO image
-ALPINE_ISO="/path/to/alpine-linux.iso"
+# Hardware configuration variables
+RAM_SIZE=2048 # in MB
+CPU_COUNT=2
+VRAM_SIZE=16 # in MB
+DISK_SIZE=71680 # in MB
 
-curl -o $ALPINE_ISO https://dl-cdn.alpinelinux.org/alpine/v3.15/releases/x86_64/alpine-standard-3.15.0-x86_64.iso
+echo #### Télécharger l'ISO d'Ubuntu si nécessaire ####
+if [ ! -f "$ISO_PATH" ]; then
+    echo "Téléchargement de l'ISO d'Ubuntu ARM..."
+    curl -o "$ISO_PATH" -L "$ISO_URL"
+fi
 
-# Create VM
-VBoxManage createvm --name "$VM_NAME" --ostype "Linux26_64" --register
+if [ ! -f "$ISO_PATH" ]; then
+    echo "ISO file not found. Please check the download."
+    exit 1
+fi
 
-# Configure VM settings
-VBoxManage modifyvm "$VM_NAME" --memory "$VM_MEMORY" --cpus "$VM_CPU" --audio none
-VBoxManage modifyvm "$VM_NAME" --nic1 nat
+echo #### Créer la VM ####
+VBoxManage createvm --name "$VM_NAME" --ostype "Ubuntu_arm64" --register
 
-# Create and attach virtual disk
-VBoxManage createhd --filename "$VM_NAME.vdi" --size "$VM_DISK_SIZE"
-VBoxManage storagectl "$VM_NAME" --name "SATA Controller" --add sata --controller IntelAhci
-VBoxManage storageattach "$VM_NAME" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium "$VM_NAME.vdi"
+echo #### Configurer la VM ####
+VBoxManage modifyvm "$VM_NAME" --memory $RAM_SIZE --cpus $CPU_COUNT --nic1 nat 
+VBoxManage modifyvm "$VM_NAME" --boot1 dvd --boot2 disk --boot3 none --boot4 none
+VBoxManage modifyvm "$VM_NAME" --graphicscontroller vmsvga --vram $VRAM_SIZE
 
-# Attach Alpine Linux ISO
-VBoxManage storagectl "$VM_NAME" --name "IDE Controller" --add ide --controller PIIX4
-VBoxManage storageattach "$VM_NAME" --storagectl "IDE Controller" --port 1 --device 0 --type dvddrive --medium "$ALPINE_ISO"
+echo #### Create VM directory if it doesn't exist ####
+mkdir -p "$VM_DIR"
 
-# Start VM
+echo #### Créer un disque virtuel ####
+if [ -f "$VM_DIR/$VM_NAME.vdi" ]; then
+    echo "VDI already exists. Removing the existing VDI."
+    rm "$VM_DIR/$VM_NAME.vdi"
+fi
+
+VBoxManage createmedium --filename "$VM_DIR/$VM_NAME.vdi" --size $DISK_SIZE --format VDI
+
+echo #### Attacher le disque virtuel à la VM ####
+VBoxManage storagectl "$VM_NAME" --name "Virt-sata" --add virtio --controller VirtIO 
+
+VBoxManage storageattach "$VM_NAME" --storagectl "Virt-sata" --port 0 --device 0 --type hdd --medium "$VM_DIR/$VM_NAME.vdi"
+
+echo Attach the  Linux installation ISO using VirtIO SCSI
+VBoxManage storageattach "$VM_NAME" --storagectl "Virt-sata" --port 0 --device 1 --type dvddrive --medium "$ISO_PATH"
+
+echo #### Unattended installation of Ubuntu with SSH ####
+VBoxManage unattended install "$VM_NAME" \
+    --user="$USERNAME" \
+    --password="$PASSWORD" \
+    --full-user-name="Ubuntu User" \
+    --install-additions \
+    --locale="en_US" \
+    --country="US" \
+    --time-zone="UTC" \
+    --hostname="ubuntu-vm.local" \
+    --iso="$ISO_PATH" \
+    --post-install-command="apt-get update && apt-get install -y openssh-server"
+
+echo #### Démarrer la VM ####
 VBoxManage startvm "$VM_NAME" --type headless
 
-# Install an OS
-VBoxManage unattended install ubuntu18server --user=myuser --password=P@SSWORD --country=US --time-zone=EST --language=en-US --hostname=ubuntu18server.local --iso=/path/ubuntu-22.04-desktop-amd64.iso --start-vm=gui
-
-# Wait for VM to boot
-sleep 30
-
-# Install VirtualBox Guest Additions
-VBoxManage guestcontrol "$VM_NAME" --username root --password password123 --execute "/sbin/apk add virtualbox-guest-additions virtualbox-guest-modules-virt" --wait-stdout
-
-# Install SSH
-VBoxManage guestcontrol "$VM_NAME" --username root --password password123 --execute "/sbin/apk add openssh" --wait-stdout
-
-# Shutdown VM
-VBoxManage controlvm "$VM_NAME" poweroff
-
-
-
+echo "#### La VM a été créée et l'installation non supervisée d'Ubuntu est en cours. ####"
 ```
 :::
 
