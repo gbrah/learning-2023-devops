@@ -6,6 +6,7 @@ import { seoPlugin } from "@vuepress/plugin-seo";
 import { defineUserConfig } from "vuepress";
 import { viteBundler } from '@vuepress/bundler-vite'
 
+
 export default defineUserConfig({
   
   base: "/learning-2023-devops/",
@@ -17,11 +18,15 @@ export default defineUserConfig({
       "link",
       { rel: "manifest", href: "/learning-2023-devops/manifest.webmanifest" },
     ],
-    ["meta", { name: "theme-color", content: "#027DFD" }],
+    ['meta', { name: 'theme-color', content: '#027DFD' }],
+    
   ],
 
   theme: defaultTheme({
         logo: 'logo_worldline.png',
+        repo: "https://github.com/gbrah/learning-2023-devops",
+        repoLabel: "⭐ Contribute!",
+        
 
         sidebar: [
           { text: 'Home', link: '/' },
@@ -41,8 +46,11 @@ export default defineUserConfig({
         bundler: viteBundler({
           viteOptions: {},
           vuePluginOptions: {},
+
       
   }),
+  
+
 
   plugins: [
     seoPlugin({
