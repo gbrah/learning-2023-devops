@@ -437,7 +437,23 @@ You can use other repository services such as [Harbor](https://goharbor.io/)
 
 ### 🧪 Exercise 4 - Docker compose migration
 
-create your HTTPD docker compose deployment with you custom image 
+Convert your previous HTTPD image  and container with a docker-compose.yml config
+::: details solution
+*docker-compose.yml*
+```yml
+version: '3'
+services:
+  web:    
+   image: 'nginx:latest'
+   ports:
+     - '80:80'
+```
+:::
+
+
+### 🧪 Exercise 5 - Volume management 
+
+Map a local directory to your Apache container to serve your default index.html file of Apache in /usr/local/apache2/htdocs
 
 ::: details solution
 docker-compose.yml
@@ -464,22 +480,13 @@ $ docker-compose up
 Creating network "dockercompose_default" with the default driver
 Creating webservice ...
 ```
-:::
 
-### 🧪 Exercise 5 - Docker compose basics
-
-Convert your previous HTTPD image  and container with a docker-compose.yml config
-::: details solution
-*docker-compose.yml*
-```yml
-version: '3'
-services:
-  web:    
-   image: 'nginx:latest'
-   ports:
-     - '80:80'
+```Dockerfile
+FROM httpd:2.4
+COPY index.html /usr/local/apache2/htdocs
 ```
 :::
+
 
 ### 🧪 Exercise 6 - Practical work
 
