@@ -410,8 +410,8 @@ Create your custom HTTP apache server image in a dockerfile Ubuntu based that is
 
 ::: details solution
 ```Dockerfile
-FROM centos
-RUN yum install httpd -y
+FROM redhat:ubi8
+RUN dnf install httpd -y
 
 ENTRYPOINT ["/usr/sbin/httpd","-D","FOREGROUND"]
 EXPOSE 80
