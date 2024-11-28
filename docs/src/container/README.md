@@ -435,8 +435,38 @@ docker push <REPOSITORY_NAME_ON_DOCKER_HUB>/<IMAGE_NAME>:<TAG>
 You can use other repository services such as [Harbor](https://goharbor.io/)
 :::
 
+### 🧪 Exercise 4 - Docker compose migration
 
-### 🧪 Exercise 4 - Docker compose basics
+create your HTTPD docker compose deployment with you custom image 
+
+::: details solution
+docker-compose.yml
+``` yml
+services:
+  webservice:
+    image: myhttpd
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - ./site-data:/usr/local/apache2/htdocs
+```
+
+``` bash
+$ ls ./site-data
+index.html
+```
+
+``` bash
+$ docker-compose up
+Creating network "dockercompose_default" with the default driver
+Creating webservice ...
+```
+:::
+
+### 🧪 Exercise 5 - Docker compose basics
 
 Convert your previous HTTPD image  and container with a docker-compose.yml config
 ::: details solution
