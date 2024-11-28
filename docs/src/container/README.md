@@ -481,7 +481,7 @@ services:
 ```
 :::
 
-### 🧪 Exercise 5 - Practical work
+### 🧪 Exercise 6 - Practical work
 
 ![docker](../assets/images/exercise_docker.png)
 
