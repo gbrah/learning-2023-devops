@@ -406,7 +406,9 @@ docker run -d -p 8080:80 httpd
 
 ### 🧪 Exercise 2 : Image creation
 
-Create your custom HTTP apache server image in a dockerfile Ubuntu based that is functionnal locally and you will push it to [dockerHUB](https://hub.docker.com/)
+Create your custom HTTP apache server image in a dockerfile that is functionnal locally and you will push it to [dockerHUB](https://hub.docker.com/)
+You can choose your distribution and adapt RUN command accordingly.
+( RedHat on the solution)
 
 ::: details solution
 ```Dockerfile
