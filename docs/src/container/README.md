@@ -456,6 +456,7 @@ services:
 Map a local directory to your Apache container to serve your default index.html file of Apache in /usr/local/apache2/htdocs
 
 ::: details solution
+
 docker-compose.yml
 ``` yml
 services:
@@ -470,20 +471,24 @@ services:
       - ./site-data:/usr/local/apache2/htdocs
 ```
 
+create apache data folder and create index.html file
 ``` bash
 $ ls ./site-data
 index.html
 ```
 
+Create a Dockerfile to build your image
+Dockerfile
+```Dockerfile
+FROM httpd:2.4
+COPY index.html /usr/local/apache2/htdocs
+```
+
+Start your containers with docker-compose
 ``` bash
 $ docker-compose up
 Creating network "dockercompose_default" with the default driver
 Creating webservice ...
-```
-
-```Dockerfile
-FROM httpd:2.4
-COPY index.html /usr/local/apache2/htdocs
 ```
 :::
 
