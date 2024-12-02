@@ -382,22 +382,24 @@ please use instead of VBoxManage , [`utmctl`](https://docs.getutm.app/scripting/
 :::details solution
 ```bash
 #!/bin/bash
-
-echo #### Create all Variables ####
-VM_NAME="UbuntuDesktopVM"
-ISO_URL="https://cdimage.ubuntu.com/releases/focal/release/ubuntu-20.04.5-live-server-arm64.iso"
-ISO_PATH="$HOME/Downloads/ubuntu-20.04.5-live-server-arm64.iso"
+echo  "Create all Variables" 
+#VM_NAME="UbuntuDesktopVM"
+VM_NAME="DebianDesktopVM"
+#ISO_URL="https://cdimage.ubuntu.com/releases/focal/release/ubuntu-20.04.5-live-server-arm64.iso"
+ISO_URL=https://cdimage.debian.org/cdimage/release/current/arm64/iso-dvd/debian-12.8.0-arm64-DVD-1.iso
+ISO_PATH="$HOME/Downloads/debian-12.8.0-arm64-DVD-1.iso"
+#ISO_PATH="$HOME/Downloads/ubuntu-20.04.5-live-server-arm64.iso"
 VM_DIR="$HOME/VirtualBox VMs/$VM_NAME"
 USERNAME="ubuntu"
 PASSWORD="ubuntu"
 
 # Hardware configuration variables
-RAM_SIZE=2048 # in MB
+RAM_SIZE=4096 # in MB
 CPU_COUNT=2
 VRAM_SIZE=16 # in MB
 DISK_SIZE=71680 # in MB
 
-echo #### Télécharger l'ISO d'Ubuntu si nécessaire ####
+echo  "Télécharger l'ISO d'Ubuntu si nécessaire" 
 if [ ! -f "$ISO_PATH" ]; then
     echo "Téléchargement de l'ISO d'Ubuntu ARM..."
     curl -o "$ISO_PATH" -L "$ISO_URL"
@@ -408,18 +410,22 @@ if [ ! -f "$ISO_PATH" ]; then
     exit 1
 fi
 
-echo #### Créer la VM ####
-VBoxManage createvm --name "$VM_NAME" --ostype "Ubuntu_arm64" --register
+echo  "Créer la VM" 
+#VBoxManage createvm --name "$VM_NAME" --ostype "Ubuntu_arm64" --register
+VBoxManage createvm --name "$VM_NAME" --ostype "Debian_arm64" --register
 
-echo #### Configurer la VM ####
-VBoxManage modifyvm "$VM_NAME" --memory $RAM_SIZE --cpus $CPU_COUNT --nic1 nat 
+echo  "Configurer la VM"
+VBoxManage modifyvm "$VM_NAME" --memory $RAM_SIZE --cpus $CPU_COUNT --nic1 nat
+
+#VBoxManage modifyvm "VM_NAME" --nic1 bridged --nictype1 virtio
+
 VBoxManage modifyvm "$VM_NAME" --boot1 dvd --boot2 disk --boot3 none --boot4 none
 VBoxManage modifyvm "$VM_NAME" --graphicscontroller vmsvga --vram $VRAM_SIZE
 
-echo #### Create VM directory if it doesn't exist ####
+echo  "Create VM directory if it doesn't exist"
 mkdir -p "$VM_DIR"
 
-echo #### Créer un disque virtuel ####
+echo  "Créer un disque virtuel" 
 if [ -f "$VM_DIR/$VM_NAME.vdi" ]; then
     echo "VDI already exists. Removing the existing VDI."
     rm "$VM_DIR/$VM_NAME.vdi"
@@ -427,15 +433,43 @@ fi
 
 VBoxManage createmedium --filename "$VM_DIR/$VM_NAME.vdi" --size $DISK_SIZE --format VDI
 
-echo #### Attacher le disque virtuel à la VM ####
+#echo  Attacher le disque virtuel à la VM 
+#VBoxManage storagectl "$VM_NAME" --name "Virt-sata" --add virtio --controller VirtIO 
+
+#VBoxManage storageattach "$VM_NAME" --storagectl "Virt-sata" --port 0 --device 0 --type hdd --medium "$VM_DIR/$VM_NAME.vdi"
+
+#echo Attach the  Linux installation ISO using VirtIO SCSI
+#VBoxManage storageattach "$VM_NAME" --storagectl "Virt-sata" --port 0 --device 1 --type dvddrive --medium "$ISO_PATH"
+
+# Create SATA controller
+ VBoxManage storagectl "$VM_NAME" --name "SATA Controller" --add sata
+
+echo  Attacher le disque virtuel à la VM 
 VBoxManage storagectl "$VM_NAME" --name "Virt-sata" --add virtio --controller VirtIO 
 
-VBoxManage storageattach "$VM_NAME" --storagectl "Virt-sata" --port 0 --device 0 --type hdd --medium "$VM_DIR/$VM_NAME.vdi"
+# Attach HDD
+VBoxManage storageattach "$VM_NAME" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium "$VM_DIR/$VM_NAME.vdi"
 
 echo Attach the  Linux installation ISO using VirtIO SCSI
-VBoxManage storageattach "$VM_NAME" --storagectl "Virt-sata" --port 0 --device 1 --type dvddrive --medium "$ISO_PATH"
+VBoxManage storageattach "$VM_NAME" --storagectl "Virt-sata" --port 1 --device 1 --type dvddrive --medium "$ISO_PATH"
 
-echo #### Unattended installation of Ubuntu with SSH ####
+# Enable UEFI
+VBoxManage modifyvm "$VM_NAME" --firmware efi
+
+# Set boot order
+VBoxManage modifyvm "$VM_NAME" --boot1 dvd --boot2 disk --boot3 none --boot4 none
+
+
+VBoxManage createmedium --filename "$VM_DIR/$VM_NAME.vdi" --size $DISK_SIZE --format VDI
+
+# Enable UEFI
+VBoxManage modifyvm "$VM_NAME" --firmware efi
+
+# Set boot order
+VBoxManage modifyvm "$VM_NAME" --boot1 dvd --boot2 disk --boot3 none --boot4 none
+
+
+echo "Unattended installation of Ubuntu with SSH"
 VBoxManage unattended install "$VM_NAME" \
     --user="$USERNAME" \
     --password="$PASSWORD" \
@@ -448,10 +482,12 @@ VBoxManage unattended install "$VM_NAME" \
     --iso="$ISO_PATH" \
     --post-install-command="apt-get update && apt-get install -y openssh-server"
 
-echo #### Démarrer la VM ####
+VBoxManage showvminfo "$VM_NAME" --details
+
+echo "Démarrer la VM"
 VBoxManage startvm "$VM_NAME" --type headless
 
-echo "#### La VM a été créée et l'installation non supervisée d'Ubuntu est en cours. ####"
+echo "La VM a été créée et l'installation non supervisée d'Ubuntu est en cours."
 ```
 :::
 
