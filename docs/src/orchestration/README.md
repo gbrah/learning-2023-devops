@@ -522,8 +522,10 @@ spec:
 Select the service of your choice and try to add it to your manifest. 
 Be creative !
 
+## 📖 Further reading
+- Kubernetes explained in 100sec @Fireship
 
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/PziYflu8cB8" title="Kubernetes explained in 100sec" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
 

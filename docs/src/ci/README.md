@@ -23,19 +23,20 @@ Integration in the production environment ensures a smooth transition of tested 
 
 | Service             | SCM/SVC (Version Control) | CI                   | CD                   | Issue Tracking       | Issue Boards         |
 |---------------------|---------------------------|----------------------|----------------------|----------------------|----------------------|
-| **Git**             | ✓                         |                      |                      |                      |                      |
-| **Mercurial (Hg)**  | ✓                         |                      |                      |                      |                      |
-| **Bitbucket**       | ✓                         | ✓                    | ✓                    | ✓                    | ✓                    |
-| **Gitea**           | ✓                         |                      |                      |                      |                      |
-| **Travis CI**       |                           | ✓                    |                      |                      |                      |
-| **Jenkins**         |                           | ✓                    | ✓                    |                      |                      |
-| **CircleCI**        |                           | ✓                    |                      |                      |                      |
-| **Azure DevOps**    | ✓                         | ✓                    | ✓                    | ✓                    |                      |
-| **GitHub Actions**  | ✓                         | ✓                    |                      | ✓                    |                      |
-| **Azure DevOps Pipelines** |                   | ✓                    | ✓                    |                      |                      |
-| **GitLab CI**    | ✓                         | ✓                    | ✓                    | ✓                    |                      |
-| **AWS CodePipeline**|                           | ✓                    | ✓                    |                      |                      |
-| **Google Cloud Build** |                        | ✓                    | ✓                    |                      |                      |
+| [**Git**](https://git-scm.com/)             | ✓                         |                      |                      |                      |                      |
+| [**Mercurial (Hg)**](https://www.mercurial-scm.org/)  | ✓                         |                      |                      |                      |                      |
+| [**GitLab CI**](https://docs.gitlab.com/ee/ci/)    | ✓                         | ✓                    | ✓                    | ✓                    | ✓                     |
+| [**GitHub (Actions)**](https://docs.github.com/en/actions)  | ✓                         | ✓                    | ✓                     | ✓                    | ✓                     |
+| [**Bitbucket**](https://bitbucket.org/product/)      | ✓                         | ✓                    | ✓                    | ✓                    | ✓                    |
+| [**Gitea**](https://about.gitea.com/)           | ✓                         |  ✓                    | ✓                     |   ✓                   | ✓                     |
+| [**Travis CI**](https://www.travis-ci.com/)       |                           | ✓                    | ✓                     |                      |                      |
+| [**Jenkin/CloudBees**](https://www.jenkins.io/)         |                           | ✓                    | ✓                    |                      |                      |
+| [**CircleCI**](https://circleci.com/)        |                           | ✓                    |✓                      |                      |                      |
+| [**Azure DevOps**](https://azure.microsoft.com/fr-fr/products/devops/) |                   | ✓                    | ✓                    |                      |                      |
+| [**Google Cloud Build**](https://cloud.google.com/build) |                        | ✓                    | ✓                    |                      |                      |
+| [**JetBrain Team City**](https://www.jetbrains.com/teamcity/?utm_source=bing&utm_medium=cpc&utm_campaign=EMEA_en_FR_TeamCity_Branded&utm_term=jetbrains%20teamcity&utm_content=jetbrains%20teamcity) |                        | ✓                    | ✓                    |                      |                      |
+| [**Xcode Build**](https://developer.apple.com/documentation/xcode/building-and-running-an-app) |                        | ✓                    | ✓                    |                      |                      |
+| [**Bitrise**](https://bitrise.io/) |                        | ✓                    | ✓                    |                      |                      |
 
 
 ## CI/CD Platform (GitLab)
@@ -130,13 +131,62 @@ The build stage involves compiling code, running automated builds, and generatin
 
 Metrics and analytics are collected during the CI/CD pipeline to measure the performance and quality of the software being developed.
 
+**Static code analysis** is the process of analyzing code without executing it. It helps identify potential issues, such as code smells, logic errors, and security vulnerabilities.
+
+**A linter** is a tool that analyzes code for potential errors, bugs, stylistic issues, and security vulnerabilities.
+
+**Dynamic code analysis** is the process of analyzing code while it is running. It helps identify potential issues, such as memory leaks, performance bottlenecks, and security vulnerabilities.  
+
+
 #### Document
 
 Generate automatically the code documentation as your developper kit for newcomers , as SDK documentation for your client...
 
+You can une anotation in your code to generate the documentation with tools like swagger, javadoc. Here is a simple example with javadoc:
+
+```java
+/**
+ * The Main class is the entry point of the application.
+ * It contains the main method that prints "Hello, World!" to the console.
+ *
+ * @author John Doe
+ * @version 1.0
+ * @since 2021-10-01
+ * @see <a href="https://example.com">Example Website</a>
+ */
+public class Main {
+
+    /**
+     * The main method prints "Hello, World!" to the console.
+     *
+     * @param args The command-line arguments.
+     */
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+    
+```
+
 #### Test
 
 Automated testing ensures that changes made to the codebase don't introduce bugs or issues. 
+
+There are many types of testing, including : 
+* **Unit testing** : test individual components or units of code
+* **Integration testing**: test the interaction between different components
+* **End-to-end testing** : test the entire application from start to finish
+* **UI testing**
+   - **Monkey testing** : simulate user interactions randomely
+   - **Snapshot testing** : compare the current UI to a previous version
+* **Performance testing** : test the performance of the application
+* **Security testing** : test the security of the application
+* **Functional testing**: test the application from a user perspective without considering the underlying implementation
+
+**Test coverage** is the percentage of code that is executed by the test suite. It is an important metric to measure the quality of the tests and ensure that all code paths are tested.
+
+[Sonarqube](https://www.sonarsource.com/) is a popular tool agregator for code quality ( metrics, bugs, vulnerabilities, code smells and test coverage). It provides a web interface to analyze code changes with dashboards to visualize the history of general quality metrics et and test.
+
+**Sonar scanner** and profiles are a tool that analyze the code and send the result to the sonarqube server.
 
 #### Secure
 
@@ -146,6 +196,25 @@ Security testing helps identify and address vulnerabilities in the code.
 #### Deploy
 
 The deployment phase involves automating the process of releasing applications into production or staging environments.
+
+They are many types of deployments :
+* To a **server** or a **cluster** of servers
+    - with **basic** tools : scp, rsync, sftp, ftp, ssh
+    - Using **provisioning** tools : ansible, chef, puppet, salt, terraform
+    - Using container **orchestration tools** : openshift, kubernetes, 
+    - Using **virtualization** tools : vmware vcenter, hyper-v, virtualbox, vagrant, 
+    - using cloud providers tools (**cli**) : aws, azure, gcp
+
+* To a **Paas platform** apis : heroku, mongo atlas, firebase,
+* To a **mobile store** : google play, apple store, amazon app store
+* To an **artifact repository** : artifactory, nexus, jfrog, artifactory
+* To a **container registry** : docker hub, gihub
+* To a **package repository** : npm, maven, nuget, pypi
+* To a **configuration repository** : consul, vault, chef, puppet, ansible, terraform
+* To a **database** : mysql, postgresql, mongodb,
+* To a **message broker** / queue solution : kafka, rabbitmq, activemq, 
+* To a **cache** : redis
+* To a **search engine** : elasticsearch
 
 
 ## Exercises

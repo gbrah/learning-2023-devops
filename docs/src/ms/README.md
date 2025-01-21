@@ -20,3 +20,10 @@ This section introduces the concept of Microservices, emphasizing their architec
 ![arch2](../assets/images/multi-services1.jpg)
 
 
+## 📖 Further reading
+
+- Scalability Simply Explained in 10 Minutes
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/EWS_CIxttVw" title="Scalability Simply Explained in 10 Minutes" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
