@@ -507,29 +507,81 @@ Create a LAMP achitecture with 2 computers over a WiFi network as follows with :
 
 *docker-compose.yml*
 ```yml
-version: '3'
 services:
   web:    
    image: 'nginx:latest'
    ports:
-     - '127.0.0.1:80:80'
+     - '127.0.0.1:8090:80'
    volumes:
      - ./site:/site
-     - ./site.conf:/etc/nginx/conf.d/site.conf
+     - ./site.conf:/etc/nginx/conf.d/default.conf
    links:
      - php
   php:
-   image: php:fpm
+   build: 
+     context: .
+     dockerfile: php.Dockerfile
    volumes:
         - ./site:/site
+        - ./php.ini:/usr/local/etc/php/conf.d/php.ini
+  
   db:
-    image: 'mysql:latest'
-    command: '--default-authentication-plugin=mysql_native_password'
-    restart: always
+    image: mysql:9.1.0
     environment:
-      MYSQL_ROOT_PASSWORD: 'example'
-      MYSQL_DATABASE: 'db'
+      MYSQL_ROOT_PASSWORD: my-secret-pw  # Set your root password
+      MYSQL_DATABASE: my_database          # Optional: Create a database on startup
+      MYSQL_USER: my_user                   # Optional: Create a user
+      MYSQL_PASSWORD: user_password         # Optional: User password
+    volumes:
+      - mysql_data:/var/lib/mysql          # Persist data
+      - ./create_db.sql:/docker-entrypoint-initdb.d/create_db.sql:ro
+    ports:
+      - "3306:3306"                         # Expose MySQL port
+    restart: always                         # Restart policy
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 9092:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+      - PMA_USER=my_user
+      - PMA_PASSWORD=user_password
+      - PMA_PORT=3306
+
+volumes:
+  mysql_data:
 ```
+*php.ini*
+```ini
+#Activate PDO
+extension=pdo.so
+extension=pdo_mysql.so
+```
+
+*create_db.sql*
+```
+CREATE DATABASE my_database;
+
+CREATE TABLE my_table (
+  id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(30) NOT NULL,
+  email VARCHAR(50) NOT NULL,
+  phone VARCHAR(20) NOT NULL
+);
+
+INSERT INTO my_table (name, email, phone) VALUES ('John', 'john@example.com', '555-555-5555');
+INSERT INTO my_table (name, email, phone) VALUES ('Jane', 'jane@example.com', '555-555-5555');
+INSERT INTO my_table (name, email, phone) VALUES ('Bob', 'bob@example.com', '555-555-5555');
+```
+*php.Dockerfile*
+```Dockerfile
+FROM php:fpm
+RUN docker-php-ext-install pdo pdo_mysql
+```
+
 *site.conf*
 ```conf
 server {
@@ -569,17 +621,30 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 try {
-    $mysqlClient = new PDO("mysql:host=db;dbname=db;charset=utf8", "root", "example");
+    $mysqlClient = new PDO("mysql:host=db;dbname=my_database;charset=utf8", "my_user", "user_password");
     $mysqlClient->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     echo "Connected successfully";
 } catch(PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
 }
+
+$sql = "SELECT * FROM my_table";
+$result = $mysqlClient->query($sql);
+
+if ($result->rowCount() > 0) {
+    while ($row = $result->fetch()) {
+        echo "<p>Name: " . $row['name'] . "<br>";
+        echo "Email: " . $row['email'] . "<br>";
+        echo "Phone: " . $row['phone'] . "</p>";
+    }
+} else {
+    echo "0 results";
+}
+
 ?>
 
 </body>
 </html>
-
 ```
 :::
 
