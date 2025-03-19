@@ -879,9 +879,7 @@ For Windows :
 
 ::: tip Fast CGI usage.
 ```conf
-    <FilesMatch \.php$>
-        SetHandler "proxy:fcgi://127.0.0.1:9000"
-    </FilesMatch>
+https://www.php.net/manual/en/install.windows.apache2.php
 ```
 :::
 
