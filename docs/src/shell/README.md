@@ -872,6 +872,14 @@ Create an apache Web server and a MariaDB  by pair with 2 laptops as follow. Ser
 
 Use `ping`, `telnet`, `ip`, `netstat` during your services deployment
 
+For Windows :
+1. Intall [Apache HTTPD](https://www.apachelounge.com/download/) server and check that it is running and listening on port 80.
+2. Install [PHP]((https://windows.php.net/download/)) and check that it is running and listening on port 9000. 
+3. Update Apache HTTPD configuration file httpd.conf to forwared requests to PHP running on the same machine. At this point you can change your index.html to index.php and add a php code phpinfo(); to see that php is interpreted.
+4. Install [MariaDB](https://mariadb.org/download/) and check that it is running and listening on port 3306.
+5. Update your php.ini to add support for PDO or mysqli library ( it could require on some OS to install the library with a package manager like yum or apt-get).
+6. Create a database and a table in MariaDB on your index.php file and check that your requests are received by the database.
+
 ::: tip Some network recalls  
 
 **What happens when you type a URL into your browser?**
