@@ -878,7 +878,7 @@ For Windows :
 3. Update Apache HTTPD configuration file httpd.conf to forwared requests to PHP running on the same machine. At this point you can change your index.html to index.php and add a php code phpinfo(); to see that php is interpreted.
 
 ::: tip Fast CGI usage.
-https://www.php.net/manual/en/install.windows.apache2.php
+[https://www.php.net/manual/en/install.windows.apache2.php](https://www.php.net/manual/en/install.windows.apache2.php)
 :::
 
 4. Install [MariaDB](https://mariadb.org/download/) and check that it is running and listening on port 3306.
@@ -886,9 +886,11 @@ https://www.php.net/manual/en/install.windows.apache2.php
 5. Update your php.ini to add support for PDO or mysqli library ( it could require on some OS to install the library with a package manager like yum or apt-get).
 
 ::: tip PHP with PDO SQL support
+```ini
 ;extension=pdo_odbc
 extension=pdo_sqlite
 extension_dir = "C:\<my-work-folder-path>\php\ext";
+```
 :::
 
 6. Create a database and a table in MariaDB on your index.php file and check that your requests are received by the database.
