@@ -874,18 +874,28 @@ Use `ping`, `telnet`, `ip`, `netstat` during your services deployment
 
 For Windows :
 1. Intall [Apache HTTPD](https://www.apachelounge.com/download/) server and check that it is running and listening on port 80.
-2. Install [PHP]((https://windows.php.net/download/)) and check that it is running and listening on port 9000. 
+2. Install [PHP](https://windows.php.net/download/)) and check that it is running and listening on port 9000. 
 3. Update Apache HTTPD configuration file httpd.conf to forwared requests to PHP running on the same machine. At this point you can change your index.html to index.php and add a php code phpinfo(); to see that php is interpreted.
 
 ::: tip Fast CGI usage.
-```conf
 https://www.php.net/manual/en/install.windows.apache2.php
-```
 :::
 
 4. Install [MariaDB](https://mariadb.org/download/) and check that it is running and listening on port 3306.
+
 5. Update your php.ini to add support for PDO or mysqli library ( it could require on some OS to install the library with a package manager like yum or apt-get).
+
+::: tip PHP with PDO SQL support
+;extension=pdo_odbc
+extension=pdo_sqlite
+extension_dir = "C:\<my-work-folder-path>\php\ext";
+:::
+
 6. Create a database and a table in MariaDB on your index.php file and check that your requests are received by the database.
+
+::: tip Request a database with PDO
+* Connect to the [MariaDB in PHP](https://www.w3schools.com/php/php_mysql_connect.asp)
+:::
 
 ::: tip Some network recalls  
 
