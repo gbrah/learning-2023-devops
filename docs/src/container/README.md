@@ -1,10 +1,11 @@
-# Containerization 
+# Containerization
 
 ## Definition
 
 Containerization involves encapsulating applications and their dependencies into containers, allowing for efficient and consistent deployment across different environments. Containers package software in a portable, self-sufficient unit, ensuring isolation and enabling seamless deployment.
 
-Objectives : 
+Objectives :
+
 * Stop the « it works on my machine » syndrom
 * Be the link between dev and ops
 
@@ -25,21 +26,21 @@ Objectives :
 
 ![cargo2docker](../assets/images/cargo2docker.png)
 
-## The market 
+## The market
+
 * `LXC` (Linux Containers): Offers lightweight, operating-system-level virtualization, enabling multiple isolated Linux systems on a single host.
-rkt (Rocket): Focuses on security and composability, providing a security-focused container runtime as an alternative to Docker.
+  rkt (Rocket): Focuses on security and composability, providing a security-focused container runtime as an alternative to Docker.
 * `Docker`: A widely used container platform enabling building, shipping, and running applications in containers, known for its user-friendly interface and comprehensive tooling.
 * `Podman`: Docker alternative allowing container management without a daemon, offering a Docker-compatible command-line interface.
 * `LXD` (Linux Containers Next): A container hypervisor with a REST API to manage system containers, aiming for a more user-friendly container management experience.
 * `Linux-VServer`: Provides lightweight virtualization for partitioning a single server into isolated containers for security and resource control.
 * `VMware vSphere Integrated Containers` (VIC)" for basic container deployment and management within VMware vSphere environments.
 
-#### What is a container ? 
+#### What is a container ?
 
-## History 
+## History
 
 #### In the Dark ages : One application on One physical server
-
 
 ![virtu1](../assets/images/virtu_arch1.png)
 
@@ -56,20 +57,20 @@ rkt (Rocket): Focuses on security and composability, providing a security-focuse
 
 * Better resource pooling : One physical machine divided into multiple virtual machines
 * Easier to scale
-* VMs in the cloud 
-    * Rapid elasticity
-    * Pay as you go model
+* VMs in the cloud
+  * Rapid elasticity
+  * Pay as you go model
 
 ![virtu3](../assets/images/virtu_arch3.png)
 
 #### But VMs
 
 * Each VMs stills requires
-    * CPU allocation
-    * Storage
-    * RAM
-    * An entire guest operating system
 
+  * CPU allocation
+  * Storage
+  * RAM
+  * An entire guest operating system
 * The more VMs you run, the more resources you need
 * Guest OS means wasted resources
 * Application portability not guaranteed
@@ -77,7 +78,6 @@ rkt (Rocket): Focuses on security and composability, providing a security-focuse
 #### Containers
 
 ![dockerarch](../assets/images/dockerarch.png)
-
 
 * Standardized packaging for software and dependencies
 * Isolate apps from each other
@@ -96,7 +96,7 @@ rkt (Rocket): Focuses on security and composability, providing a security-focuse
 ![vmvscontainer](../assets/images/vmvscontainer.png)
 
 * Containers are an app level construct
-* VMs are an infrastructure level construct to turn one machine into many servers 
+* VMs are an infrastructure level construct to turn one machine into many servers
 
 #### Mixed architecture
 
@@ -109,40 +109,38 @@ rkt (Rocket): Focuses on security and composability, providing a security-focuse
 ### History
 
 - **2004: Solaris containers and Zones technology introduced**
-
 - **2008: Linux containers (LXC1.0) introduced**
-
 - **2013: Initial Release**
+
   - Salomon Hykes starts docker as an internal project within dotCloud company
   - *June 2013:* Docker was released as an open-source project by dotCloud, revolutionizing application deployment through containers.
-
 - **2014: Rapid Growth and Adoption**
+
   - *March 2014:* Docker 1.0 launched, gaining attention for its ease of use and portability.
   - *June 2014:* DockerCon 2014 introduced Docker Hub, a cloud-based repository for sharing container images.
-
 - **2015: Expansion and Tooling**
+
   - *April 2015:* Docker 1.6 brought multi-host networking for secure communication.
   - *June 2015:* Docker Engine 1.7 introduced orchestration and scheduling tools.
   - *November 2015:* Docker Engine 1.9 enhanced networking, storage, and security.
-
 - **2016: Maturation and Enterprise Focus**
+
   - *February 2016:* Docker Engine 1.10 introduced secrets management.
   - *June 2016:* Docker Datacenter launched for enterprise-scale container management.
-
 - **2017: Further Enterprise Expansion**
+
   - *March 2017:* Docker Enterprise Edition (EE) consolidated Docker's commercial offering.
   - *October 2017:* Docker EE 17.06 added Kubernetes support.
-
 - **2018-2019: Continued Enhancements**
+
   - *May 2018:* Docker Desktop for Mac and Windows simplified local development.
   - *April 2019:* Docker Desktop introduced Kubernetes support.
-
 - **2020-Present: Focus on Developer Experience and Security**
+
   - *June 2020:* Docker 19.03 emphasized improved developer experiences.
   - *2021-2022:* Docker continued refining security, enhancing developer tools, and optimizing performance.
 
-
-### Statistics 
+### Statistics
 
 - Docker Hub hosts millions of container images, supported by a vast community.
 - Billions of downloads and adoption by millions of developers and enterprises globally.
@@ -150,91 +148,103 @@ rkt (Rocket): Focuses on security and composability, providing a security-focuse
 
 Throughout its evolution, Docker transformed from a niche tool to a fundamental technology, driving container adoption due to its user-friendliness, portability, and ecosystem growth.
 
-### Inside docker 
+### Inside docker
 
 Written in [GO](http://golang.org)
 Unique tool upon:
-* **LibContainer** (using LXC as plugin : Cgroup and Namespacing) providing :
-    * **Filesystem isolation**: each process container runs in a completely separate root filesystem.
-    * **Resource isolation**: system resources like cpu and memory can be allocated differently to each process container, using cgroups.
-    * **Network isolation**: each process container runs in its own network namespace, with a virtual interface and IP address of its own.
-* **Storage Backends** (devicemapper, AUFS, BTRFS, …) providing :
-   * **Layered file system**: root filesystems are created using “copy-on-write”, which makes deployment extremely fast, memory-cheap and disk-cheap.
 
-###  Basic usage
+* **LibContainer** (using LXC as plugin : Cgroup and Namespacing) providing :
+  * **Filesystem isolation**: each process container runs in a completely separate root filesystem.
+  * **Resource isolation**: system resources like cpu and memory can be allocated differently to each process container, using cgroups.
+  * **Network isolation**: each process container runs in its own network namespace, with a virtual interface and IP address of its own.
+* **Storage Backends** (devicemapper, AUFS, BTRFS, …) providing :
+  * **Layered file system**: root filesystems are created using “copy-on-write”, which makes deployment extremely fast, memory-cheap and disk-cheap.
+
+### Basic usage
 
 Containerization platforms like Docker provide tools to create, deploy, and manage containers. Users can build containers from images, run them as instances, manage their lifecycle, and interact with them using container-specific commands.
 
 - **Active Containers**
+
   ```bash
   docker ps
   ```
+
   *Output:*
+
   ```
   CONTAINER ID   IMAGE         COMMAND       CREATED       STATUS       PORTS      NAMES
   abcdef123456   my_container  "/start.sh"   1 hour ago    Up 1 hour   80/tcp     web_server
   ```
-
 - **List All Containers (Active and Inactive):**
+
   ```bash
   docker ps -a
   ```
+
   *Output:*
+
   ```
   CONTAINER ID   IMAGE         COMMAND       CREATED        STATUS      PORTS       NAMES
   abcdef123456   my_container  "/start.sh"   1 hour ago     Up 1 hour  80/tcp      web_server
   12345abcde     my_image      "/bin/bash"   3 days ago     Exited (0)              my_container
   ```
-
 - **List Images:**
+
   ```bash
   docker images
   ```
+
   - **Pull an Image from a registry:**
+
   ```bash
   docker pull [OPTIONS] NAME[:TAG|@DIGEST]
   ```
 
   - **Remove an Image:**
+
   ```bash
   docker rmi [OPTIONS] IMAGE [IMAGE...]
   ```
-
 - **Create a Container from an Image:**
+
   ```bash
   docker create [OPTIONS] IMAGE [COMMAND] [ARG...]
   ```
 
-    - **Start a Running Container:**
+  - **Start a Running Container:**
+
   ```bash
   docker start [OPTIONS] CONTAINER [CONTAINER...]
   ```
-
 - **Run a Container: ( create+start)**
+
   ```bash
   docker run [OPTIONS] IMAGE[:TAG|@DIGEST] [COMMAND] [ARG...]
   ```
 
   - **Stop a Running Container:**
+
   ```bash
   docker stop [OPTIONS] CONTAINER [CONTAINER...]
   ```
-
 - **Remove a Container:**
+
   ```bash
   docker rm [OPTIONS] CONTAINER [CONTAINER...]
   ```
-
 - **Port Forwarding (Map Host Port to Container Port):**
+
   ```bash
   docker run -p HOST_PORT:CONTAINER_PORT IMAGE_NAME
   ```
 - **Execute a Command in a Running Container:**
+
   ```bash
   docker exec [OPTIONS] CONTAINER COMMAND [ARG...]
   ```
-
 - **View Container Logs:**
+
   ```bash
   docker logs [OPTIONS] CONTAINER
   ```
@@ -247,7 +257,7 @@ A Docker image is a self-contained, immutable snapshot or template that includes
 
 #### Create a dockerFile
 
-``` dockerfile 
+```dockerfile
 # Base Image
 FROM ubuntu:latest
 
@@ -277,38 +287,45 @@ CMD [ "executable" ]
 ```
 
 1. `FROM ubuntu:latest`
+
 - **`FROM`**: Specifies the base image for the new image being built.
 - **`ubuntu:latest`**: Base image, in this case, Ubuntu, and `latest` tag referring to the most recent version.
 
 2. `LABEL maintainer="Your Name <your@email.com>"`
+
 - **`LABEL`**: Adds metadata to the image.
 - **`maintainer`**: Custom label key identifying the maintainer's information.
 
 3. `RUN apt-get update && apt-get install -y package1 package2`
+
 - **`RUN`**: Executes commands within the container during the build process.
 - **`apt-get update && apt-get install -y package1 package2`**: Updates package lists and installs specified packages.
 
 4. `WORKDIR /app`
+
 - **`WORKDIR`**: Sets the working directory for subsequent commands in the Dockerfile.
 - **`/app`**: Directory path within the container.
 
 5. `COPY . /app`
+
 - **`COPY`**: Copies files or directories from the host machine to the container.
 - **`.`**: Represents the current directory on the host.
 - **`/app`**: Destination directory in the container.
 
 6. `EXPOSE 80`
+
 - **`EXPOSE`**: Informs Docker that the container listens on specific network ports at runtime.
 - **`80`**: Port number exposed by the container.
 
 7. `ENV ENV_VAR_NAME=value`
+
 - **`ENV`**: Sets environment variables inside the container.
 - **`ENV_VAR_NAME=value`**: Name-value pair for an environment variable.
 
 8. `CMD [ "executable" ]`
+
 - **`CMD`**: Specifies the default command to be executed when a container starts.
 - **`[ "executable" ]`**: Command and its arguments to run when the container starts.
-
 
 #### Building and Pushing an Image to Docker Hub
 
@@ -329,16 +346,14 @@ Replace placeholders:
 - `repositoryname`: Name for your repository on Docker Hub.
 - `tag`: Tag/version for your image (e.g., `latest`).
 
-
-
 ### Registry
 
 ![registry](../assets/images/registry.png)
 
-`Registries` store Docker **images**, acting as **repositories** where users can push, pull, and manage images. 
+`Registries` store Docker **images**, acting as **repositories** where users can push, pull, and manage images.
 `Docker Hub` is a popular public registry, while private registries offer secure storage for proprietary or sensitive images within organizations.
 
-## Multi-container 
+## Multi-container
 
 ![docker-compose](../assets/images/docker-compose.png)
 
@@ -374,27 +389,36 @@ services:
 ### Basic commands
 
 - **Start Services Defined in `docker-compose.yml`:**
+
   ```bash
   docker-compose up
   ```
-
 - **Start Services in Detached Mode:**
+
   ```bash
   docker-compose up -d
   ```
-
 - **Stop Services:**
+
   ```bash
   docker-compose down
   ```
 
 ## Exercises
 
-### 🧪 Exercise 1 - Basic commands 
+### 🧪 Exercise 1 - Basic commands
 
-Pull HTTP apache server image from docker HUB and start your first web server containerized. Test it on your browser
+1. Install [docker desktop](https://www.docker.com/products/docker-desktop) on your computer
+2. Have a look at the [docker hub](https://hub.docker.com/) and pull an image of an HTTP server (httpd). You can find a documentation [here](https://hub.docker.com/_/httpd)
+3. Find the commands on the course to :
+
+* Pull HTTP apache server image from docker HUB
+* Start your first web server containerized with the url http://localhost:8080
+
+4. Test it on your browser
 
 ::: details solution
+
 ```bash
 # Pull the Apache HTTP Server image from Docker Hub
 docker pull httpd
@@ -402,6 +426,7 @@ docker pull httpd
 # Run the Apache HTTP Server container
 docker run -d -p 8080:80 httpd
 ```
+
 :::
 
 ### 🧪 Exercise 2 : Image creation
@@ -411,6 +436,7 @@ You can choose your distribution and adapt RUN command accordingly.
 ( RedHat on the solution)
 
 ::: details solution
+
 ```Dockerfile
 FROM redhat:ubi8
 RUN dnf install httpd -y
@@ -418,6 +444,7 @@ RUN dnf install httpd -y
 ENTRYPOINT ["/usr/sbin/httpd","-D","FOREGROUND"]
 EXPOSE 80
 ```
+
 :::
 
 ### 🧪 Exercise 3 - Registry management
@@ -425,10 +452,12 @@ EXPOSE 80
 Create your own repository to the registry DOCKER HUB  and try to push a your docker HTTPD image to your registry
 
 ::: details solution
+
 ```bash
 docker tag <IMAGE_LOCAL_ID_OR_NAME> <REPOSITORY_NAME_ON_DOCKER_HUB>/<IMAGE_NAME>:<TAG>
 docker push <REPOSITORY_NAME_ON_DOCKER_HUB>/<IMAGE_NAME>:<TAG>
 ```
+
 :::
 
 ::: tip
@@ -440,25 +469,27 @@ You can use other repository services such as [Harbor](https://goharbor.io/)
 Convert your previous HTTPD image  and container with a docker-compose.yml config
 ::: details solution
 *docker-compose.yml*
+
 ```yml
 version: '3'
 services:
-  web:    
+  web:  
    image: 'nginx:latest'
    ports:
      - '80:80'
 ```
+
 :::
 
-
-### 🧪 Exercise 5 - Volume management 
+### 🧪 Exercise 5 - Volume management
 
 Map a local directory to your Apache container to serve your default index.html file of Apache in /usr/local/apache2/htdocs
 
 ::: details solution
 
 docker-compose.yml
-``` yml
+
+```yml
 services:
   webservice:
     image: myhttpd
@@ -472,32 +503,36 @@ services:
 ```
 
 create apache data folder and create index.html file
-``` bash
+
+```bash
 $ ls ./site-data
 index.html
 ```
 
 Create a Dockerfile to build your image
 Dockerfile
+
 ```Dockerfile
 FROM httpd:2.4
 COPY index.html /usr/local/apache2/htdocs
 ```
 
 Start your containers with docker-compose
-``` bash
+
+```bash
 $ docker-compose up
 Creating network "dockercompose_default" with the default driver
 Creating webservice ...
 ```
-:::
 
+:::
 
 ### 🧪 Exercise 6 - Practical work
 
 ![docker](../assets/images/exercise_docker.png)
 
 Create a LAMP achitecture with 2 computers over a WiFi network as follows with :
+
 * an Apache / Nginx service
 * a PHP service
 * a mariaDB or MongoDB service
@@ -506,9 +541,10 @@ Create a LAMP achitecture with 2 computers over a WiFi network as follows with :
 ::: details solution
 
 *docker-compose.yml*
+
 ```yml
 services:
-  web:    
+  web:  
    image: 'nginx:latest'
    ports:
      - '127.0.0.1:8090:80'
@@ -554,7 +590,9 @@ services:
 volumes:
   mysql_data:
 ```
+
 *php.ini*
+
 ```ini
 #Activate PDO
 extension=pdo.so
@@ -562,6 +600,7 @@ extension=pdo_mysql.so
 ```
 
 *create_db.sql*
+
 ```
 CREATE DATABASE my_database;
 
@@ -576,13 +615,16 @@ INSERT INTO my_table (name, email, phone) VALUES ('John', 'john@example.com', '5
 INSERT INTO my_table (name, email, phone) VALUES ('Jane', 'jane@example.com', '555-555-5555');
 INSERT INTO my_table (name, email, phone) VALUES ('Bob', 'bob@example.com', '555-555-5555');
 ```
+
 *php.Dockerfile*
+
 ```Dockerfile
 FROM php:fpm
 RUN docker-php-ext-install pdo pdo_mysql
 ```
 
 *site.conf*
+
 ```conf
 server {
     listen 80;
@@ -590,7 +632,7 @@ server {
     server_name 127.0.0.1;
     error_log  /var/log/nginx/error.log;
     access_log /var/log/nginx/access.log;
-    root /site;    
+    root /site;  
 
     location ~ \.php$ {
         try_files $uri =404;
@@ -603,7 +645,9 @@ server {
     }
 }
 ```
+
 *site/index.php*
+
 ```php
 <!DOCTYPE html>
 <html>
@@ -646,6 +690,7 @@ if ($result->rowCount() > 0) {
 </body>
 </html>
 ```
+
 :::
 
 :::tip PDO on php:fpm
@@ -653,6 +698,7 @@ Remember that you need to activate and install the PDO extension of your PHP con
 :::
 
 ## 📖 Further reading
+
 - De chroot à Docker, Podman, et maintenant les modules Wasm, 40 ans d'évolution de la conteneurisation by Thomas SCHWENDER
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/dikQOyAzdS4" title="De chroot à Docker, Podman, et maintenant les modules Wasm, 40 ans d'évolution de la conteneurisation" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
