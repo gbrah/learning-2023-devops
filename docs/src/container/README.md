@@ -410,7 +410,7 @@ services:
 
 1. Install [docker desktop](https://www.docker.com/products/docker-desktop) on your computer
 2. Have a look at the [docker hub](https://hub.docker.com/) and pull an image of an HTTP server (httpd). You can find a documentation [here](https://hub.docker.com/_/httpd)
-3. Find the commands on the course to :
+3. Find the commands on the course to 
 
 * Pull HTTP apache server image from docker HUB
 * Start your first web server containerized with the url http://localhost:8080
