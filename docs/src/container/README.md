@@ -438,8 +438,10 @@ You can choose your distribution and adapt RUN command accordingly.
 ::: details solution
 
 ```Dockerfile
-FROM redhat:ubi8
-RUN dnf install httpd -y
+FROM redhat/ubi8
+
+RUN yum update -y # Update the system
+RUN dnf install httpd -y # Install httpd
 
 ENTRYPOINT ["/usr/sbin/httpd","-D","FOREGROUND"]
 EXPOSE 80
